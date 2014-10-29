@@ -1,0 +1,33 @@
+table {
+    margin: auto;
+}
+
+div {
+    margin: auto;
+    width: 920;
+    height: 2px;
+    background-color: black;
+}
+
+#petitions_logo {
+    padding-right: 20px;
+}
+#menu_bar {
+    font-family: letter gothic std;
+    font-size:  15px;
+}
+
+.click_menu{
+    padding-top: 45px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.click_button {
+    padding: 150px 20px 20px 0px;
+}
+
+.buttons{
+    height: 150px;
+    width: 150px;
+}
