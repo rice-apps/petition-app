@@ -14,13 +14,15 @@ from authentication import auth
 import models.petition
 
 PAGE_URI = '/petitions'
+MY_PAGE_URI = '/petitions/my'
 
 class PetitionsHandler(webapp2.RequestHandler):
     def get(self):
         user = auth.require_login(self)
-        petitions = models.petition.get_petitions(user)
-        allPetitions = models.petition.get_all_petitions()
-        view = pages.render_view(PAGE_URI, {'petitions': petitions, 'all petitions':allPetitions})
+        #petitions = models.petition.get_petitions(user)
+        effectivePetitions = models.petition.get_in_effect_petitions()
+        expiredPetitions = models.petition.get_expired_petitions()
+        view = pages.render_view(PAGE_URI, {'effective petitions': effectivePetitions, 'expired petitions':expiredPetitions})
         pages.render_page(self, view)
 
     def post(self):
@@ -37,6 +39,12 @@ class PetitionsHandler(webapp2.RequestHandler):
         data['id'] = str(petition.key())
         self.response.out.write(json.dumps(data))
 
+class MyPageHandler(webapp2.RequestHandler):
+    def get(self):
+        user = auth.require_login(self)
+        myPetitions = models.petition.get_petition(user)
+        view = pages.render_view(MY_PAGE_URI, {'my petitions': myPetitions})
+        pages.render_page(self, view)
 
 class VoteHandler(webapp2.RequestHandler):
     def post(self):

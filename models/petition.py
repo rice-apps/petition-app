@@ -6,10 +6,11 @@ __author__ = 'Xiaoyu Chen <xc12@rice.edu>'
 
 from google.appengine.ext import db
 from user import User
+import datetime
 
 class Petition(db.Model):
     user = db.ReferenceProperty(User, required=True)
-    time_added = db.DateTimeProperty(auto_now=True)
+    date_added = db.DateProperty(auto_now=True)
     title = db.StringProperty(required=True)
     note = db.TextProperty()
     votes = db.IntegerProperty(default = 0)
@@ -31,6 +32,9 @@ class Petition(db.Model):
         if net_id not in self.voters:
             voters.append(net_id)
             self.votes = self.votes + 1
+            return True
+        else:
+            return False
 
 
 def create_petition(user, petition):
@@ -42,13 +46,16 @@ def create_petition(user, petition):
     return petition
 
 def vote_petition(voter, petition):
-    petition.add_voter(voter)
+    return petition.add_voter(voter)
 
 def get_petition(key):
     return Petition.get(key)
 
-def get_all_petitions():
-    return Petition.all()
+def get_in_effect_petitions():
+    return Petition.gql('WHERE date_added >= :1', date.today() - timedelta(14))
+
+def get_expired_petitions():
+    return Petition.gql('WHERE date_added < :1', date.today() - timedelta(14))
 
 def delete_petition(petition):
     # Refactored into this method incase there are other things to be done
