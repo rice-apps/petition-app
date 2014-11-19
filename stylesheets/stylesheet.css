@@ -42,3 +42,6 @@ div {
 	margin: 0 auto;
 }
 
+.body {
+	vertical-align:middle;
+}

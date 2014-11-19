@@ -1,5 +1,5 @@
-<div class="container-narrow">
-  <div id="petitions">
+<div class="petition-page"> 
+ <div id="petitions">
     {% for petition in petitions %}
       <div class="alert" data-id="{{ petition.id }}">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -10,23 +10,23 @@
     {% endfor %}
   </div>
   
-  <form class="form-horizontal well container-narrow">
+  <form class="add-petition">
     <fieldset>
       <legend>Add Petition</legend>
         <label>Title</label>
-        <input id="input-title" type="text" class="span3">
-        <label>Note</label>
-        <textarea id="input-text" class="span3 petition" rows="5" placeholder="Type something..."></textarea>
-      <button id="add-button" class="btn btn-primary">Add</button>
+        <input id="input-title" type="text">
+		<div><label>Note</label></div>
+        <textarea id="input-text" rows="5" placeholder="Type something..."></textarea>
+      <button id="add-button" class="buttons">Add</button>
     </fieldset>
   </form>
 
-  <div class='wow'>
-    <div class="jumbotron">
+  <div class=>
+    <div class=>
       <h1>Leaving?</h1>
-      <div class="lead">Come back soon!</div>
-      <a class="btn btn-large btn-success" href="/authenticate/logout?destination=home">Sign Out</a>
+      <div class=>Come back soon!</div>
+      <a class="buttons" href="/authenticate/logout?destination=home">Sign Out</a>
     </div>
-  </div>
-</div> <!-- /container -->
+</div>
+
 <script src="/static/js/petitions.js"></script>
