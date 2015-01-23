@@ -52,10 +52,10 @@ def get_petition(key):
     return Petition.get(key)
 
 def get_in_effect_petitions():
-    return Petition.gql('WHERE date_added >= :1', date.today() - timedelta(14))
+    return Petition.gql('WHERE date_added >= :1', datetime.datetime.now() - datetime.timedelta(14))
 
 def get_expired_petitions():
-    return Petition.gql('WHERE date_added < :1', date.today() - timedelta(14))
+    return Petition.gql('WHERE date_added < :1', datetime.datetime.now() - datetime.timedelta(14))
 
 def delete_petition(petition):
     # Refactored into this method incase there are other things to be done

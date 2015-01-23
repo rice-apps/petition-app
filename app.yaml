@@ -13,10 +13,13 @@ handlers:
 - url: /stylesheets
   static_dir: stylesheets
 
+- url: /static
+  static_dir: static
+
 - url: /authenticate/.*
   script: authentication.auth.app
 
-- url: /.*
+- url: .*
   script: main.app
 
 libraries:
