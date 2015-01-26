@@ -12,7 +12,7 @@ from sendgrid import Mail
 def sendConfirmation(petitioner, organizer_name, organizer_email):
 
     #Make a secure connection to SendGrid
-    sg = SendGridClient('harmonica1243', '9VwY2sCTuEeYEWpD', secure = True)
+    sg = SendGridClient('', '', secure = True)
 
     # Make a messsage Object
     message = Mail()
