@@ -14,7 +14,7 @@ from authentication import auth
 import models.petition
 
 PAGE_URI = '/petitions'
-MY_PAGE_URI = '/petitions/my'
+MY_PAGE_URI = '/my'
 
 class PetitionsHandler(webapp2.RequestHandler):
     def get(self):
@@ -22,7 +22,10 @@ class PetitionsHandler(webapp2.RequestHandler):
         #petitions = models.petition.get_petitions(user)
         effectivePetitions = models.petition.get_in_effect_petitions()
         expiredPetitions = models.petition.get_expired_petitions()
-        view = pages.render_view(PAGE_URI, {'effective petitions': effectivePetitions, 'expired petitions':expiredPetitions})
+        logging.info("effective petitions: %s", effectivePetitions)
+        for petition in effectivePetitions:
+            print petition['votes']
+        view = pages.render_view(PAGE_URI, {'effectivePetitions': effectivePetitions, 'expiredPetitions':expiredPetitions})
         pages.render_page(self, view)
 
     def post(self):
@@ -42,8 +45,8 @@ class PetitionsHandler(webapp2.RequestHandler):
 class MyPageHandler(webapp2.RequestHandler):
     def get(self):
         user = auth.require_login(self)
-        myPetitions = models.petition.get_petition(user)
-        view = pages.render_view(MY_PAGE_URI, {'my petitions': myPetitions})
+        myPetitions = models.petition.get_petitions(user)
+        view = pages.render_view(MY_PAGE_URI, {'myPetitions': myPetitions})
         pages.render_page(self, view)
 
 class VoteHandler(webapp2.RequestHandler):
@@ -55,6 +58,16 @@ class VoteHandler(webapp2.RequestHandler):
         petition = models.petition.get_petition(petition_id)
         models.petition.vote_petition(user, petition)
         self.response.out.write('Successfully voted!')
+
+class UnvoteHandler(webapp2.RequestHandler):
+    def post(self):
+        user = auth.get_logged_in_user()
+        if not user:
+            return
+        petition_id = self.request.get('id')
+        petition = models.petition.get_petition(petition_id)
+        models.petition.unvote_petition(user, petition)
+        self.response.out.write('Successfully unvoted!')
 
 
 class GarbageHandler(webapp2.RequestHandler):

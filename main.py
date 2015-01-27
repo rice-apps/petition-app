@@ -19,6 +19,9 @@ from controllers import main, petitions
 
 app = webapp2.WSGIApplication([
     ('/petitions', petitions.PetitionsHandler),
+    ('/petitions/vote', petitions.VoteHandler),
+    ('/petitions/unvote', petitions.UnvoteHandler),
+    ('/my', petitions.MyPageHandler),
     ('/petitions/delete', petitions.GarbageHandler),
     ('/.*', main.MainHandler)
 ], debug=True)

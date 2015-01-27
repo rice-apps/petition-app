@@ -13,7 +13,7 @@ jQuery ->
             'note': fields[1].val()
 
         $.ajax
-            url: '/stickies'
+            url: '/petitions'
             type: 'POST'
             data: 'data': JSON.stringify(postData)
             success: (data) ->
@@ -25,22 +25,49 @@ jQuery ->
                     <div class='alert' data-id='#{id}'>
                     <button type='button' class='close' data-dismiss='alert'>&times;</button>
                     <h4>#{title}</h4>
+                    <h6>0</h6>
                     <p>#{note}</p>
+                    <button type='button' id='vote-button' class='btn btn-mini'>Vote</button>
                     </div>")
-                $('#stickies').prepend(html)
+                $('#petitions').prepend(html)
                 html.hide().slideDown(500)
-                html.children('button[class="close"]').click(deleteSticky)
+                html.children('button[class="close"]').click(deletePetition)
 
-    $('button[class="close"]').click(deleteSticky)
+    $('button[class="close"]').click(deletePetition)
+    $('#vote-button').click(votePetition)
+    $('#unvote-button').click(unvotePetition)
     
-
-deleteSticky = (e) ->
-    sticky = $(this).parent()
-    sticky_id = sticky.attr('data-id')
+votePetition = (e) ->
+    console.log('Script ran!')
+    petition = $(this).parent()
+    petition_id = petition.attr('data-id')
     $.ajax
-        url: '/stickies/delete'
+        url: '/petitions/vote'
         type: 'POST'
-        data: 'id': sticky_id
+        data: 'id': petition_id
+        success: (data) ->
+            if data == 'Successfully voted!'
+                alert('Voted successfully!')
+
+unvotePetition = (e) ->
+    console.log('Script ran!')
+    petition = $(this).parent()
+    petition_id = petition.attr('data-id')
+    $.ajax
+        url: '/petitions/unvote'
+        type: 'POST'
+        data: 'id': petition_id
+        success: (data) ->
+            if data == 'Successfully unvoted!'
+                alert('Unvoted successfully!')
+
+deletePetition = (e) ->
+    petition = $(this).parent()
+    petition_id = petition.attr('data-id')
+    $.ajax
+        url: '/petitions/delete'
+        type: 'POST'
+        data: 'id': petition_id
         success: (data) ->
             if data == 'Success!'
-                sticky.slideUp(500)
+                petition.slideUp(500)

@@ -1,0 +1,22 @@
+<div class="container-narrow">
+  <div id="petitions">
+    {% for petition in myPetitions %}
+      <div class="alert" data-id="{{ petition.id }}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4>{{ petition.title }}</h4>
+        <h6>{{ petition.votes}}</h6>
+        <p>{{ petition.note }}</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <a class="btn btn-large btn-success" href="/petitions">Back</a>
+
+  <div class='wow'>
+    <div class="jumbotron">
+      <h1>Leaving?</h1>
+      <div class="lead">Come back soon!</div>
+      <a class="btn btn-large btn-success" href="/authenticate/logout?destination=home">Sign Out</a>
+    </div>
+  </div>
+</div> 

@@ -9,7 +9,7 @@ from google.appengine.ext import db
 class User(db.Model):
     net_id = db.StringProperty(required=True)
 
-    def get_id():
+    def get_id(self):
     	return self.net_id
 
 
