@@ -13,6 +13,8 @@ class Petition(db.Model):
     date_added = db.DateProperty(auto_now=True)
     title = db.StringProperty(required=True)
     note = db.TextProperty()
+    organizer_email = db.StringProperty(required=True)
+    organizer_name = db.StringProperty(required=True)
     votes = db.IntegerProperty(default = 0)
     voters = db.ListProperty(str)
 
@@ -22,12 +24,25 @@ class Petition(db.Model):
             'id': str(self.key()),
             'title': self.title,
             'note': self.note,
-            'votes': self.votes
+            'votes': self.votes,
+            'organizer_email': self.organizer_email,
+            'organizer_name': self.organizer_name
         }
-
+    def get_votes(self):
+        return self.votes
+    
     def get_voters(self):
-        return self.voters
+        return self.votes
 
+    def get_user(self):
+        return self.user
+    
+    def get_org_email(self):
+        return self.organizer_email
+    
+    def get_org_name(self):
+        return self.organizer_name
+    
     def add_voter(self,voter):
         net_id = voter.get_id()
         if net_id not in self.voters:
@@ -55,13 +70,15 @@ def create_petition(user, petition):
         petition = Petition(
             user=user.key(),
             title=petition['title'],
-            note=petition['note'])
+            note=petition['note'],
+            organizer_email=petition['org-email'],
+            organizer_name=petition['org-name'])
         petition.put()
         return petition
     else:
         return existing
 
-def vote_petition(voter, petition):
+def vote_petition(voter, petition):    
     return petition.add_voter(voter)
 
 def unvote_petition(unvoter, petition):
@@ -69,6 +86,7 @@ def unvote_petition(unvoter, petition):
 
 def get_petition(key):
     return Petition.get(key)
+
 
 def get_in_effect_petitions():
     result = []

@@ -8,11 +8,13 @@ person has been approved by the petitions.
 
 from sendgrid import SendGridClient
 from sendgrid import Mail
+from netid2name import netid2name
 
-def sendConfirmation(petitioner, organizer_name, organizer_email):
-
+def sendConfirmation(petitioner_id, organizer_name, organizer_email):
+    petitioner = netid2name(petitioner_id)
+    
     #Make a secure connection to SendGrid
-    sg = SendGridClient('', '', secure = True)
+    sg = SendGridClient('harmonica1243', '', secure = True)
 
     # Make a messsage Object
     message = Mail()
@@ -27,8 +29,12 @@ def sendConfirmation(petitioner, organizer_name, organizer_email):
                      <i>-Petition Application</i></p>'''.format(organizer_name, petitioner))
     message.set_from('petition-app@riceapps.org')
 
-    #Add a recipient
+    #Send message to Organizer
     message.add_to('{!s} <{!s}>'.format(organizer_name, organizer_email))
+    #Send message to petitioner
+    message.add_to('{!s} <{!s}>'.format(petitioner, petitioner_id + '@rice.edu'))
 
     # use the Web API to send the message
     sg.send(message)
+
+

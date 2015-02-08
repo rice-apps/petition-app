@@ -8,7 +8,7 @@
       return function(e) {
         var field, fields, postData, _i, _len;
         e.preventDefault();
-        fields = [$('#input-title'), $('#input-text')];
+        fields = [$('#input-title'), $('#input-text'), $('#org-name'), $('#org-email')];
         for (_i = 0, _len = fields.length; _i < _len; _i++) {
           field = fields[_i];
           if (field.val().trim() === "") {
@@ -18,7 +18,9 @@
         }
         postData = {
           'title': fields[0].val(),
-          'note': fields[1].val()
+          'note': fields[1].val(),
+		  'org-name': fields[2].val(),
+		  'org-email': fields[3].val()
         };
         return $.ajax({
           url: '/petitions',
@@ -32,6 +34,7 @@
             id = response['id'];
             title = response['title'];
             note = response['note'];
+			
             html = $("<div class='alert' data-id='" + id + "'> <button type='button' class='close' data-dismiss='alert'>&times;</button> <h4>" + title + "</h4> <h6>0</h6> <p>" + note + "</p> <button type='button' id='vote-button' class='btn btn-mini'>Vote</button> </div>");
             $('#petitions').prepend(html);
             html.hide().slideDown(500);
@@ -41,7 +44,7 @@
       };
     })(this));
     $('button[class="close"]').click(deletePetition);
-    $('#vote-button').click(votePetition);
+    $('button[id="vote-button"]').click(votePetition);
     return $('#unvote-button').click(unvotePetition);
   });
 
@@ -60,6 +63,9 @@
         if (data === 'Successfully voted!') {
           return alert('Voted successfully!');
         }
+		if (data === 'You cannot vote on your own petition!') {
+			return alert('You cannot vote on your own petition!');
+			}
       }
     });
   };
@@ -78,6 +84,9 @@
       success: function(data) {
         if (data === 'Successfully unvoted!') {
           return alert('Unvoted successfully!');
+        }
+        if (data === 'You cannot unvote your own petition!') {
+          return alert('You cannot unvote your own petition!');
         }
       }
     });

@@ -8,8 +8,10 @@ import json
 import logging
 import pages
 import webapp2
+from  mail import sendConfirmation
 
 from authentication import auth
+from models.user import User
 
 import models.petition
 
@@ -54,10 +56,18 @@ class VoteHandler(webapp2.RequestHandler):
         user = auth.get_logged_in_user()
         if not user:
             return
+
         petition_id = self.request.get('id')
         petition = models.petition.get_petition(petition_id)
-        models.petition.vote_petition(user, petition)
-        self.response.out.write('Successfully voted!')
+
+        #Ensures you cannot vote your own petition.
+        if user.get_id() != petition.get_user().get_id():
+            models.petition.vote_petition(user, petition)
+            self.response.out.write('Successfully voted!')
+            if petition.get_votes() == 25:
+                sendConfirmation(petition.get_user().get_id(), petition.get_org_name(), petition.get_org_email())
+        else:
+            self.response.out.write('You cannot vote on your own petition!')
 
 class UnvoteHandler(webapp2.RequestHandler):
     def post(self):
@@ -66,8 +76,14 @@ class UnvoteHandler(webapp2.RequestHandler):
             return
         petition_id = self.request.get('id')
         petition = models.petition.get_petition(petition_id)
-        models.petition.unvote_petition(user, petition)
-        self.response.out.write('Successfully unvoted!')
+
+        #Ensures you cannot unvote your own petition. You never voted in the first place.
+        if user.get_id() != petition.get_user().get_id():
+            models.petition.unvote_petition(user, petition)
+            self.response.out.write('Successfully unvoted!')
+
+        else:
+            self.response.out.write('You cannot unvote your own petition!')
 
 
 class GarbageHandler(webapp2.RequestHandler):

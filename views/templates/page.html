@@ -1,32 +1,66 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	
-		<link href="/stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
-		<title>Home</title>
-	</head>
-	
-	<body>
-	    <table>
-	        <tbody>
-	            <tr id="menu_bar">
-	                <td id="petitions_logo"><img src="http://1.bp.blogspot.com/-CjDdjCeXYTw/VFEwJD93aaI/AAAAAAAAAg8/jNEW-sXnc3c/s1600/rice_petitions.png" /></td>
-	                <td class="click_menu">START A PETITION</td>
-	                <td class="click_menu">ACTIVE PETITIONS</td>
-	                <td class="click_menu">PREVIOUS PETITIONS</td>
-	                <td class="click_menu">MY PAGE</td>
-	                <td class="click_menu">LOG OUT</td>
-	            </tr>
+    <meta charset="utf-8">
+    <title>Petitions - Rice</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-	        </tbody>
-	    </table>
-        <div></div>
-	    <table>
-	        <tr>
-	            <td class="click_button"><img class="buttons"; src="http://1.bp.blogspot.com/-dn9cgcgeDp4/VFE07jiw95I/AAAAAAAAAhU/iGh2EN_fAWg/s1600/start_petition.png" /></td>
-	            <td class="click_button"><img class="buttons"; src="http://1.bp.blogspot.com/-JsP0eXskM-I/VFE07guUUlI/AAAAAAAAAhQ/fCxT9bzZtuc/s1600/active_petition.png" /></td>
-	            <td class="click_button"><img class="buttons"; src="http://1.bp.blogspot.com/-bGGjeR64iRA/VFE07eFDFSI/AAAAAAAAAhM/VNQRBev26KE/s1600/results_petition.png"/></td>
-	        </tr>
-	    </table>
+    <!-- Le styles -->
+    <link href="/static/css/lib/bootstrap.min.css" rel="stylesheet">
+	<link href="/static/css/lib/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="/static/css/lib/bootstrap-responsive.min.css" rel="stylesheet">
+	<link href="/static/css/lib/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/stylesheet.css" rel="stylesheet">
 
-	</body>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://twitter.github.com/bootstrap/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://twitter.github.com/bootstrap/assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://twitter.github.com/bootstrap/assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="http://twitter.github.com/bootstrap/assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="http://twitter.github.com/bootstrap/assets/ico/favicon.png">
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script href="/static/js/lib/bootstrap.min.js"></script>
+	<script href="/static/js/lib/bootstrap.js"></script>
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/main.html">Petitions- Rice</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <!-- <li class="active"><a href="http://twitter.github.com/bootstrap/examples/starter-template.html#">Home</a></li> -->
+              <!-- <li><a href="http://twitter.github.com/bootstrap/examples/starter-template.html#about">About</a></li> -->
+              <!-- <li><a href="http://twitter.github.com/bootstrap/examples/starter-template.html#contact">Contact</a></li> -->
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    {{ content }}
+
+</body>
 </html>
