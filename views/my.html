@@ -1,5 +1,11 @@
 <div class="container-narrow">
   <div id="petitions">
+	{% if myPetitions|length == 0 %}
+		<div class="alert">
+		<h2>You have no petitions!</h2>
+		</div>
+	{% endif %}
+	
     {% for petition in myPetitions %}
       <div class="alert" data-id="{{ petition.id }}">
         <button type="button" class="close" data-dismiss="alert">&times;</button>

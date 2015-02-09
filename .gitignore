@@ -1,2 +1,5 @@
 /Website/nbproject/private/
 *.pyc
+controllers/mail.py
+controllers/netid2name.py
+*.pyc

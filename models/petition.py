@@ -30,19 +30,19 @@ class Petition(db.Model):
         }
     def get_votes(self):
         return self.votes
-    
+
     def get_voters(self):
         return self.votes
 
     def get_user(self):
         return self.user
-    
+
     def get_org_email(self):
         return self.organizer_email
-    
+
     def get_org_name(self):
         return self.organizer_name
-    
+
     def add_voter(self,voter):
         net_id = voter.get_id()
         if net_id not in self.voters:
@@ -65,8 +65,12 @@ class Petition(db.Model):
 
 
 def create_petition(user, petition):
-    existing = Petition.gql('WHERE title = :1', petition['title']).get()
-    if not existing:
+    #existing = Petition.gql('WHERE title = :1', petition['title']).get()
+    existing = get_petitions(user)
+    name_list = []
+    for petition in existing:
+        name_list.append(petition['title'])
+    if not existing or petition['title'] not in name_list:
         petition = Petition(
             user=user.key(),
             title=petition['title'],
@@ -78,7 +82,7 @@ def create_petition(user, petition):
     else:
         return existing
 
-def vote_petition(voter, petition):    
+def vote_petition(voter, petition):
     return petition.add_voter(voter)
 
 def unvote_petition(unvoter, petition):
@@ -113,12 +117,3 @@ def get_petitions(user):
     for petition in query:
         result.append(petition.to_json())
     return result
-
-
-
-
-
-
-
-
-
