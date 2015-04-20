@@ -1,15 +1,21 @@
 <div class="container">
   <div class="row">
 		
-		<div class="span2">
+		<div class="span4">
 		  <a class="btn btn-large btn-success" href="/my">My Page</a>
 		  <h2><strong>Leaving?</strong></h2>
 		  <p>Come back soon</p>
 		  <a class="btn btn-large btn-success" href="/authenticate/logout?destination=home">Sign Out</a>
+		  <!-- Button trigger modal -->
+		  <br><br>
+		  <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newPetition">
+		    New Petition
+		  </button>
 		</div>
 	  
-	  <div class="span6" id="petitions">
+	  <div class="span4" id="petitions">
 		{% for petition in effectivePetitions %}
+		{% if loop.index is divisibleby 2 %}
 		  <div class="alert" data-id="{{ petition.id }}">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<h4>{{ petition.title }}</h4>
@@ -19,26 +25,62 @@
 			<button type="button" id="vote-button" class="btn btn-mini">Vote</button>
 			<button type="button" id="unvote-button" class="btn btn-mini">Unvote</button>
 		  </div>
+		{% endif %}
 		{% endfor %}
 	  </div>
 	  
-	  <div class="span4">
-		  <form class="form-horizontal well container-narrow">
-			<fieldset>
-			  <legend>Add Petition</legend>
-				<label>Name</label>
-				<input id="input-title" type="text" placeholder="i.e. Burt McMurtry" class="span3">
-				<label>Organizer Name</label>
-				<input id="org-name" type="text" placeholder="Organizer's Name" class="span3">
-				<label>Organizer Email</label>
-				<input id="org-email" type="text" placeholder="Organizer's Email Address" class="span3">
-				<label>Petition Comments</label>
-				<textarea id="input-text" class="span3 petition" rows="5" placeholder="Send a message to your supporters!"></textarea>
-			  <button id="add-button" class="btn btn-primary">Add</button>
-			</fieldset>
-		  </form>
-		 </div>
+	  <div class="span4" id="petitions">
+		{% for petition in effectivePetitions %}
+		  {% if not loop.index is divisibleby 2 %}
+		  <div class="alert" data-id="{{ petition.id }}">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<h4>{{ petition.title }}</h4>
+			<h6>Vote #: {{ petition.votes}}</h6>
+			<p>{{ petition.note }}</p>
+			<p>{{petition.user}}</p>
+			<button type="button" id="vote-button" class="btn btn-mini">Vote</button>
+			<button type="button" id="unvote-button" class="btn btn-mini">Unvote</button>
+		  </div>
+		  {% endif %}
+		{% endfor %}
+	  </div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="newPetition" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="newLabel">New Petition</h4>
+	      </div>
+
+	      <div class="modal-body">
+	        <form class="form-horizontal well container-narrow">
+				<fieldset>
+				  <legend>Add Petition</legend>
+					<label>Name</label>
+					<input id="input-title" type="text" placeholder="i.e. Burt McMurtry" class="span3">
+					<label>Organizer Name</label>
+					<input id="org-name" type="text" placeholder="Organizer's Name" class="span3">
+					<label>Organizer Email</label>
+					<input id="org-email" type="text" placeholder="Organizer's Email Address" class="span3">
+					<label>Petition Comments</label>
+					<textarea id="input-text" class="span3 petition" rows="5" placeholder="Send a message to your supporters!"></textarea>
+				  <button id="add-button" class="btn btn-primary" data-dismiss="modal">Add</button>
+				</fieldset>
+		  	</form>
+	      </div>
+
+	    </div>
+	  </div>
+	</div>
+
   </div>
+  <!-- modal toggle -->
+  <script type="text/javascript">
+  $('#newPetition').modal('show')
+  $('#newPetition').modal('hide')
+  </script>
 
 </div> <!-- /container -->
 <script src="/static/js/petitions.js"></script>
