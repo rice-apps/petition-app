@@ -9,12 +9,22 @@
     font-weight: bold;
 }
 
-a, p {
+a, p, span {
     font-family: AktivGrotesk;
 }
 
-h1,h2,h3 {
-    font-family: AktivGrotesk; 
+/* For the navigation sidebar in the petitions.html page */
+
+.header {
+    margin-bottom:1em;
+}
+
+#intro-box {
+    margin-top:2em;
+    border-color: grey;
+    border-style:dotted;
+    border-width:1px;
+    padding:2em;
 }
 
 .container-narrow {
@@ -34,3 +44,36 @@ h1,h2,h3 {
     margin-top: 10px;
     float: right;
 }
+
+
+/** Footer **/
+footer{
+    width: 100%;
+    height: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+    footer > p{
+        width: 200px;
+        margin: 0 auto;
+        color: #797C7F;
+        font-size: 12px;
+        padding-bottom: 15px;
+    }
+    .footer-menu{
+        width: auto;
+        margin-bottom: 10px;
+    }
+    .footer-menu > a{
+        font-size: 11px;
+        -webkit-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+    }
+        .footer-menu > a:hover{
+            color: #797C7F;
+        }
+    footer > span{
+        color: #BBBDC0;
+        font-size: 12px;
+    }
