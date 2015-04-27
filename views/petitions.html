@@ -7,7 +7,8 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="/main.html"><img id ="logo" src="/static/img/upvote-logo-white.png" alt="Home" height="20px" width="60px"></a>
+ 
+      <a class="brand" href="/main.html"><img id ="logo" src="/static/img/upvote-logo-white.png" alt="Home" height="20px" width="60px"></a> 
 <!--  TODO: get nav bar w/ search looking nice and working on the backend too
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -70,41 +71,55 @@
 		{% endfor %}
 	  </div>
 
-	<!-- Modal -->
-	<div class="modal fade" id="newPetition" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="newLabel">New Petition</h4>
-	      </div>
+    <!-- Modal -->
+    <div class="modal fade" id="newPetition" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="newLabel">NEW PETITION</h4>
+          </div>
 
-	      <div class="modal-body" style="max-height: 800px">
-	        <form class="form-horizontal well container-narrow">
-				<fieldset>
-				  <legend>Add Petition</legend>
-					<label>Name</label>
-					<input id="input-title" type="text" placeholder="i.e. Burt McMurtry" class="span3">
-					<label>Organizer Name</label>
-					<input id="org-name" type="text" placeholder="Organizer's Name" class="span3">
-					<label>Organizer Email</label>
-					<input id="org-email" type="text" placeholder="Organizer's Email Address" class="span3">
-					<label>Petition Comments</label>
-					<textarea id="input-text" class="span3 petition" rows="5" placeholder="Send a message to your supporters!"></textarea>
-				  <button id="add-button" class="btn btn-primary" data-dismiss="modal">Add</button>
-				</fieldset>
-		  	</form>
-	      </div>
+          <div class="modal-body" style="max-height: 800px">
+            <form class="form-horizontal well container-narrow"> 
+                <fieldset>
+                  <legend>Add Petition</legend>
+                    <label>Name</label>
+                    <input id="input-title" type="text" placeholder="eg. John Doe" class="span3">
+                    <label>Organization Name</label>
+                    <input id="org-name" type="text" placeholder="eg. Rice CS Club" class="span3">
+                    <label>Organization Email</label>
+                    <input id="org-email" type="text" placeholder="example@gmail.com" class="span3">
+                    <label>Description</label>
+                    <textarea id="input-text" class="span3 petition" rows="5" placeholder="This will display on our website!"></textarea><br><br>
+                  <button id="add-button" class="btn btn-primary" data-dismiss="modal">SUBMIT</button>
+                </fieldset>
+             
+            </form>
+          </div>
 
-	    </div>
-	  </div>
-	</div>
+        </div>
+      </div>
+    </div>
 
   </div>
   <!-- modal toggle -->
   <script type="text/javascript">
   $('#newPetition').modal('show')
   $('#newPetition').modal('hide')
+  </script>
+  <!-- rotate through some colors -->
+  <script type="text/javascript">
+    var colors = ['#F5A623', '#50E3C2', '#F8E71C', '#7ED321'];
+    var petitions = $('#petitions').children();
+    var color = 0;
+    for (i=0; i < petitions.length; i++) {
+        petitions[i].css('border-style', 'solid')
+        petitions[i].css('border-color', colors[color])
+
+        if (color == 3) {color = 0;}
+        else {color++;}
+    }
   </script>
 
 </div> <!-- /container -->

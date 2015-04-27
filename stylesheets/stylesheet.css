@@ -5,6 +5,12 @@ div {
     background-color: black;
 }
 
+#logo {
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+    -moz-filter: invert(100%);
+}
+
 #petitions_logo {
     padding-right: 100px;
 }

@@ -27,10 +27,10 @@ a, p, span {
     padding:2em;
 }
 
+/* For the main landing page */
 .container-narrow {
-    margin: 0 auto;
-    max-width: 312px;
-    margin-bottom: 40px;
+    margin: 10px auto;
+    max-width: 275px;
 }
 
 .wow {
@@ -42,7 +42,6 @@ a, p, span {
 
 #add-button {
     margin-top: 10px;
-    float: right;
 }
 
 
@@ -59,7 +58,7 @@ footer{
         margin: 0 auto;
         color: #797C7F;
         font-size: 12px;
-        padding-bottom: 15px;
+        padding: 0px;
     }
     .footer-menu{
         width: auto;
@@ -77,3 +76,4 @@ footer{
         color: #BBBDC0;
         font-size: 12px;
     }
+
