@@ -1,4 +1,21 @@
+@font-face{
+    font-family: AktivGrotesk;
+    src: url('/static/fonts/AktivGrotesk200.ttf');
+}
 
+@font-face{
+    font-family: AktivGrotesk;
+    src: url('../static/fonts/AktivGrotesk900.ttf');
+    font-weight: bold;
+}
+
+a, p {
+    font-family: AktivGrotesk;
+}
+
+h1,h2,h3 {
+    font-family: AktivGrotesk; 
+}
 
 .container-narrow {
     margin: 0 auto;
