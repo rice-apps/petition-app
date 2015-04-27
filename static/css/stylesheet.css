@@ -17,3 +17,9 @@
     margin-top: 10px;
     float: right;
 }
+
+#logo {
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+    -moz-filter: invert(100%);
+}
