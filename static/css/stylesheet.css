@@ -1,5 +1,4 @@
 
-
 .container-narrow {
     margin: 0 auto;
     max-width: 312px;
@@ -13,7 +12,22 @@
 .sticky {
 }
 
-#add-button {
+#add-button, #add-election-button {
     margin-top: 10px;
     float: right;
+}
+
+.alert {
+  color: black;
+  background-color: #C2FFEB;
+}
+
+.alert-info {
+	background-color: white;
+	height: 30px;
+	margin-bottom: 1px;
+}
+
+.alert h4 {
+  color: black;
 }
