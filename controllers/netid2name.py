@@ -1,11 +1,12 @@
 import urllib2
 import json
 
-api_key = ""
+api_key = "mhobldbd6gcq2rd7734kiq7xoze897"
+
 
 def netid2name(netid):
     # Get the JSON response from the server
-    apiResponseString = urllib2.urlopen("http://riceapi.kevinlin.info/api/people?key=" + api_key + "&name=" + netid).read()
+    apiResponseString = urllib2.urlopen("http://api.riceapps.org/api/people?key=" + api_key + "&net_id=" + netid).read()
     apiResponse = json.loads(apiResponseString)
 
     # Do something useful with it
@@ -14,7 +15,7 @@ def netid2name(netid):
         return students[0]["name"]
     else:
         print "An error was encountered:", apiResponse["message"]
-  
+
 
 
 

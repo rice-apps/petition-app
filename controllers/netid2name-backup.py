@@ -5,22 +5,25 @@ def netid2name(net_id):
     Takes a NetId and returns the name associated with the NetId after a query of publicly available information.
     Based off of the code made by Kevin Lin.
     """
-##    if not is_api_key_valid(request.args.get("key", "")):
-##        return error("Invalid or unauthorized API key")
+    # if not is_api_key_valid(request.args.get("key", "")):
+    # return error("Invalid or unauthorized API key")
 
     # Parameters from URL
     lookup_net_id = net_id
-##    lookup_name = None
+    # lookup_name = None
     # Replace spaces in name with plus sign, if they exist
-##    if lookup_name:
-##        lookup_name = "+".join(lookup_name.split())
+    # if lookup_name:
+    # lookup_name = "+".join(lookup_name.split())
 
     # Rice 411 lookup directory
     # Prioritize search by Net ID
     if lookup_net_id is not None:
-        url = "http://fouroneone.rice.edu/query.php?tab=people&search=" + lookup_net_id + "&department=&phone=&action=Search"
-##    elif lookup_name is not None:
-##        url = "http://fouroneone.rice.edu/query.php?tab=people&search=" + lookup_name + "&department=&phone=&action=Search"
+        url = "http://fouroneone.rice.edu/query.php?tab=people&search=" + lookup_net_id + \
+              "&department=&phone=&action=Search"
+    # elif lookup_name is not None:
+    # url = "http://fouroneone.rice.edu/query.php?tab=people&search=" + lookup_name +
+    # "&department=&phone=&action=Search"
+
     else:
         return error("One of Net ID or Name in URL parameters must be non-null")
     data = urllib2.urlopen(url)

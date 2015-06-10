@@ -37,8 +37,9 @@
               return alert('Duplicate Position');
             }
             else {
-              html = $("<div class='alert alert-info' data-id='" + response['id'] + "'> <button type='button' class='close deletePosition' data-dismiss='alert'>"
-							+ "&times;</button> <h5>" + response['title'] + "</h5> </div>");
+              html = $("<div class='alert alert-info' data-id='" + response['id'] +
+                  "'> <button type='button' class='close deletePosition' data-dismiss='alert'>"
+                  + "&times;</button> <h5>" + response['title'] + "</h5> </div>");
 							
 							var election = response['election'].split('-')[0];
 							election = election.substring(0, election.length - 1);
