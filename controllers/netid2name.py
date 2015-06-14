@@ -1,7 +1,7 @@
 import urllib2
 import json
 
-api_key = "mhobldbd6gcq2rd7734kiq7xoze897"
+api_key = ""
 
 
 def netid2name(netid):
