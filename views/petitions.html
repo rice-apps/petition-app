@@ -1,122 +1,114 @@
-
 <div class="container">
     <div class="navbar navbar-fixed">
-      <div class="container">
-        <div class="nav-collapse collapse">
-          <ul class="nav">
-            <li class="active"><a href="/petitions">All Petitions</a></li>
-            <li><a href="/my">My Petitions</a></li>
-            <li><a href="/elections">Elections</a></li>
-            <li><a href="/authenticate/logout?destination=home">Sign Out</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
+        <div class="container">
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="active"><a href="/petitions">All Petitions</a></li>
+                    <li><a href="/my">My Petitions</a></li>
+                    <li><a href="/elections">Elections</a></li>
+                    <li><a href="/authenticate/logout?destination=home">Sign Out</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
     </div>
-  
 
-  
-	<div class="row">
-    <div class="span2">  
-			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newPetition">
+    <div class="row">
+        <div class="span2">
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newPetition">
 				New Petition
 			</button>
-		</div>    
-	  <div class="span8" id="petitions">
-    {% if effectivePetitions|length > 0 %}
-      {% for petition in effectivePetitions %}
-        <div class="alert" data-id="{{ petition.id }}">
-					<button type="button" class="close deletePetition" data-dismiss="alert">&times;</button>
-					<h4><b>{{petition.name}} </b>is running for {{petition.organization}}: {{petition.position}}</h4>
-					<h5>Election: {{petition.election}}</h5>
-					<h6>Number of Signatures: {{petition.signature_num}}</h6>
-					<p>{{ petition.message }}</p>
-					<button type="button" id="sign-button" class="btn btn-mini">Sign</button>
-					<button type="button" id="unsign-button" class="btn btn-mini">Unsign</button>
+		</div>
+        <div class="span8" id="petitions">
+            {% if effectivePetitions|length > 0 %}
+            {% for petition in effectivePetitions %}
+            <div class="alert" data-id="{{ petition.id }}">
+                <button type="button" class="close deletePetition" data-dismiss="alert">&times;</button>
+                <h4><b>{{petition.name}} </b>is running for {{petition.organization}}: {{petition.position}}</h4>
+                <h5>Election: {{petition.election}}</h5>
+                <h6>Number of Signatures: {{petition.signature_num}}</h6>
+                <p>{{ petition.message }}</p>
+                <button type="button" id="sign-button" class="btn btn-mini">Sign</button>
+                <button type="button" id="unsign-button" class="btn btn-mini">Unsign</button>
+            </div>
+            {% endfor %}
+            {% endif %}
         </div>
-      {% endfor %}
-    {% endif %}
-	  </div>
-    
-    <!-- Modal -->
-    <div class="modal fade" id="newPetition" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true" style="display: block;">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
+
+        <!-- Modal -->
+        <div class="modal fade" id="newPetition" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
 						</button>
-            <h4 class="modal-title" id="newLabel">New Petition</h4>
-          </div>
-
-          <div class="modal-body">
-            <form class="form-horizontal well container-narrow">
-                <fieldset>
-                  <legend>Add Petition</legend>
-                    <label>Candidate Name</label>
-                      <input id="input-name" type="text" placeholder="Bob Smith" class="span3">
-                    <label>Candidate Email</label>
-                      <input id="input-email" type="email" placeholder="bob85@rice.edu" class="span3">
-                    <div class="form-group">
-                      <label>Election</label>
-                      <select class="span3" id="input-election"
-											onchange="electionSelected(this, document.getElementById('input-organization'), document.getElementById('input-position'))">
-                        <option disabled selected> -- Select an Election -- </option>
-                        {% for election in ongoingElections %}
-                          <option value="{{election.title}} - {{election.organization}}">{{election.title}}</option>
-                        {% endfor %}
-                      </select>
+                        <h4 class="modal-title" id="newLabel">New Petition</h4>
                     </div>
-                    <label>Organization Name</label>
-                      <input id="input-organization" class="span3" readonly>
-										<div class="form-group">
-											<label>Position Name</label>
-											<select class="span3" id="input-position">
-												<option disabled selected> -- Select a Position -- </option>
-											</select>
-										</div>
-                    <label>Message(optional)</label>
-                      <textarea id="input-text" class="span3 petition" rows="5" placeholder="Send a message to your supporters!"></textarea>
-										<button id="add-button" class="btn btn-primary" data-dismiss="modal">Add</button>
-                </fieldset>
-              </form>
-          </div>
-
+                    <div class="modal-body">
+                        <form class="form-horizontal well container-narrow">
+                            <fieldset>
+                                <legend>Add Petition</legend>
+                                <label>Candidate Name</label>
+                                <input id="input-name" type="text" placeholder="Bob Smith" class="span3">
+                                <label>Candidate Email</label>
+                                <input id="input-email" type="email" placeholder="bob85@rice.edu" class="span3">
+                                <div class="form-group">
+                                    <label>Election</label>
+                                    <select class="span3" id="input-election" onchange="electionSelected(this, document.getElementById('input-organization'), document.getElementById('input-position'))">
+                                        <option disabled selected> -- Select an Election -- </option>
+                                        {% for election in ongoingElections %}
+                                        <option value="{{election.title}} - {{election.organization}}">{{election.title}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <label>Organization Name</label>
+                                <input id="input-organization" class="span3" readonly>
+                                <div class="form-group">
+                                    <label>Position Name</label>
+                                    <select class="span3" id="input-position">
+                                        <option disabled selected> -- Select a Position -- </option>
+                                    </select>
+                                </div>
+                                <label>Message(optional)</label>
+                                <textarea id="input-text" class="span3 petition" rows="5" placeholder="Send a message to your supporters!"></textarea>
+                                <button id="add-button" class="btn btn-primary" data-dismiss="modal">Add</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    
+    </div> <!-- row -->
 
-  </div> <!-- row -->
-  
-  <!-- modal toggle -->
-  <script type="text/javascript">
+    <!-- modal toggle -->
+    <script type="text/javascript">
 		$('#newPetition').modal('show')
 		$('#newPetition').modal('hide')
-  </script>
+    </script>
 </div> <!-- /container -->
 
 <script src="/static/js/petitions.js"></script>
 <script type="text/javascript">
     function electionSelected(electionSelectBox,organizationTextBox, positionSelectBox) {
-			var election_name = electionSelectBox.value.split('-')[0];
-      var organization = electionSelectBox.value.split('-')[1];
-      organizationTextBox.value = organization;
-      organizationTextBox.text = organization;
-			
-			return $.ajax({
-      url: '/petitions/positions',
-      type: 'POST',
-      data: {
-        'election': election_name
-      },
-      success: function(data) {				
-				data = data.split(', ');
-				for (var i = 0, n = data.length; i<n; i ++) {
-					data[i] = data[i].replace("'", '');
-					data[i] = data[i].replace("'", '');
-					data[i] = data[i].replace("[", '');
-					data[i] = data[i].replace("]", '');
-				}
+        var election_name = electionSelectBox.value.split('-')[0];
+        var organization = electionSelectBox.value.split('-')[1];
+        organizationTextBox.value = organization;
+        organizationTextBox.text = organization;
+
+        return $.ajax({
+            url: '/petitions/positions',
+            type: 'POST',
+            data: {
+                'election': election_name
+            },
+            success: function(data) {
+                data = data.split(', ');
+                for (var i = 0, n = data.length; i<n; i ++) {
+                    data[i] = data[i].replace("'", '');
+                    data[i] = data[i].replace("'", '');
+                    data[i] = data[i].replace("[", '');
+                    data[i] = data[i].replace("]", '');
+                }
 				
 				var positionSelect = document.getElementById('input-position');
 				positionSelect.options.length = 0;
@@ -129,11 +121,7 @@
 						text: data[i]
 					}));
 				}
-					
-			}
-					
-
-    });
-			
-      }
+            }
+        });
+    }
 </script>

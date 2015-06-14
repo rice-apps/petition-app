@@ -47,9 +47,8 @@ def create_election(user, election):
         name_list.append(existing_elections['title'].replace(' ', ''))
     date_expired = convert_to_date(election['date_expired'])
 
-    election_name = election['title']
-    while election_name.endswith(' '):
-        election_name = election_name[:-1]
+    # Removes spaces from end of string
+    election_name = election['title'].rstrip()
 
     if election['title'].replace(' ', '') not in name_list or not existing:
         election = Election(

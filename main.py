@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 import webapp2
-from controllers import main, petitions, elections
+from controllers import main, petitions, elections, organizations
 
 app = webapp2.WSGIApplication([
     ('/petitions', petitions.PetitionsHandler),
@@ -25,9 +25,11 @@ app = webapp2.WSGIApplication([
     ('/petitions/delete', petitions.GarbageHandler),
     ('/elections', elections.ElectionsHandler),
     ('/elections/delete', elections.GarbageHandler),
-		('/positions', elections.PositionsHandler),
-		('/positions/delete', elections.PositionsGarbageHandler),
-		('/petitions/positions', petitions.PositionsPopulateHandler),
-    ('/.*', main.MainHandler)
+    ('/positions', elections.PositionsHandler),
+    ('/positions/delete', elections.PositionsGarbageHandler),
+    ('/petitions/positions', petitions.PositionsPopulateHandler),
+    ('/organizations', organizations.OrganizationsHandler),
+    ('/organizations/delete', organizations.GarbageHandler),
+    ('/', main.MainHandler)
 
 ], debug=True)

@@ -1,135 +1,130 @@
 <div class="container">
     <div class="navbar navbar-fixed">
-      <div class="container">
-        <div class="nav-collapse collapse">
-          <ul class="nav">
-            <li><a href="/petitions">All Petitions</a></li>
-            <li><a href="/my">My Petitions</a></li>
-            <li class="active"><a href="/elections">Elections</a></li>
-            <li><a href="/authenticate/logout?destination=home">Sign Out</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
-
-  <div class="row">
-		<div class="span2">  
-			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newElection">
-				New Election
-			</button>
-			<br></br>
-			<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newPosition">
-				New Position
-			</button>
-			<br></br>
-			<p>If there is an error in the placement of a new election or new position or if the options have not correctly populated
-			for the possible elections when creating a position, please refresh the page and try again.</p>
-		</div>   
-		
-	  <div class="span8" id="elections"> 
-      {% if ongoingElections|length > 0 %}
-        {% for election in ongoingElections %}
-          <div class="alert" data-id="{{ election.id }}">
-						<button type="button" class="close deleteElection" data-dismiss="alert">&times;</button>
-						<h4><b>{{election.title}} </b> is hosted by {{election.organization}} and expires on {{election.date_expired}}</h4>
-						<div id="{{stripped_election_names[election.title]}}">
-							{% if positions[election.title]|length > 0 %}
-									{% for position in positions[election.title] %}
-										<div class="alert alert-info" data-id="{{ position.id }}">
-											<button type="button" class="close deletePosition" data-dismiss="alert">&times;</button>
-											<h5> {{position.title}} </h5>
-										</div>
-									{% endfor %}	 
-							{% endif %}
-						</div>
-					</div>
-					
-        {% endfor %}
-      {% endif %}
-	  </div>
-	  
-	  <!-- Modal -->
-    <div class="modal fade" id="newPosition" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true" style="display: block;">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          
-					<div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-            <h4 class="modal-title" id="newLabel">New Position</h4>
-          </div>
-
-          <div class="modal-body">
-            <form class="form-horizontal well container-narrow">
-                <fieldset>
-                  <legend>Add Position</legend>
-									<label>Position Name</label>
-										<input id="input-position" placeholder="President" class="span3">
-									<div class="form-group">
-                      <label>Election</label>
-                      <select class="span3" id="input-position-election" onchange="updateOrganization(this, document.getElementById('input-position-organization'))">
-                        <option disabled selected> -- Select an Election -- </option>
-                        {% for election in ongoingElections %}
-                          <option value="{{election.title}} - {{election.organization}}">{{election.title}}</option>
-                        {% endfor %}
-                      </select>
-                  </div> 
-									<label>Organization Name</label>
-                      <input id="input-position-organization" class="span3" readonly>
-									<button id="add-position-button" class="btn btn-primary" data-dismiss="modal">Add</button>
-                </fieldset>
-              </form>
-          </div>
-
+        <div class="container">
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li><a href="/petitions">All Petitions</a></li>
+                    <li><a href="/my">My Petitions</a></li>
+                    <li class="active"><a href="/elections">Elections</a></li>
+                    <li><a href="/authenticate/logout?destination=home">Sign Out</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
         </div>
-      </div>
     </div>
-				
-		<!-- Modal -->
-    <div class="modal fade" id="newElection" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true" style="display: block;">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          
-					<div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-            <h4 class="modal-title" id="newLabel">New Election</h4>
-          </div>
 
-          <div class="modal-body">
-            <form class="form-horizontal well container-narrow">
-                <fieldset>
-                  <legend>Add Election</legend>
-									<label>Title of Election</label>
-										<input id="input-title" type="text" placeholder="SA General Election 2015" class="span3">
-									<label>Email</label>
-										<input id="input-email" type="email" placeholder="bob85@rice.edu" class="span3">
-									<label>Deadline to Submit Petitions</label>
-										<input id="input-date" type="date" placeholder="05/10/2015" class="span3">
-									<label>Organization</label>
-										<input id="input-organization" type="text" placeholder="Student Association" class="span3">
-									<button id="add-election-button" class="btn btn-primary" data-dismiss="modal">Add</button>
-                </fieldset>
-              </form>
-          </div>
-
+    <div class="row">
+        <div class="span2">
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newElection">
+                New Election
+            </button>
+            <br>
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newPosition">
+                New Position
+            </button>
+            <br>
+            <p>If there is an error in the placement of a new election or new position or if the options have not correctly populated
+            for the possible elections when creating a position, please refresh the page and try again.</p>
         </div>
-      </div>
-    </div>
-		
-	</div> <!--row-->
-	
-	<!-- modal toggle -->
-  <script type="text/javascript">
-		$('#newElection').modal('show')
-		$('#newElection').modal('hide')
-		$('#newPosition').modal('show')
-		$('#newPosition').modal('hide')
-  </script>
-	
+
+        <div class="span8" id="elections">
+            {% if ongoingElections|length > 0 %}
+            {% for election in ongoingElections %}
+            <div class="alert" data-id="{{ election.id }}">
+                <button type="button" class="close deleteElection" data-dismiss="alert">&times;</button>
+                <h4><b>{{election.title}} </b> is hosted by {{election.organization}} and expires on {{election.date_expired}}</h4>
+                <div id="{{stripped_election_names[election.title]}}">
+                    {% if positions[election.title]|length > 0 %}
+                    {% for position in positions[election.title] %}
+                    <div class="alert alert-info" data-id="{{ position.id }}">
+                        <button type="button" class="close deletePosition" data-dismiss="alert">&times;</button>
+                        <h5> {{position.title}} </h5>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="newPosition" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="newLabel">New Position</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal well container-narrow">
+                            <fieldset>
+                                <legend>Add Position</legend>
+                                <label>Position Name</label>
+                                <input id="input-position" placeholder="President" class="span3">
+                                <div class="form-group">
+                                    <label>Election</label>
+                                    <select class="span3" id="input-position-election" onchange="updateOrganization(this, document.getElementById('input-position-organization'))">
+                                        <option disabled selected> -- Select an Election -- </option>
+                                        {% for election in ongoingElections %}
+                                        <option value="{{election.title}} - {{election.organization}}">{{election.title}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <label>Organization Name</label>
+                                <input id="input-position-organization" class="span3" readonly>
+                                <button id="add-position-button" class="btn btn-primary" data-dismiss="modal">Add</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="newElection" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true" style="display: block;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="newLabel">New Election</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <form class="form-horizontal well container-narrow">
+                            <fieldset>
+                                <legend>Add Election</legend>
+                                <label>Title of Election</label>
+                                <input id="input-title" type="text" placeholder="SA General Election 2015" class="span3">
+                                <label>Email</label>
+                                <input id="input-email" type="email" placeholder="bob85@rice.edu" class="span3">
+                                <label>Deadline to Submit Petitions</label>
+                                <input id="input-date" type="date" placeholder="05/10/2015" class="span3">
+                                <label>Organization</label>
+                                <input id="input-organization" type="text" placeholder="Student Association" class="span3">
+                                <button id="add-election-button" class="btn btn-primary" data-dismiss="modal">Add</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <!--row-->
+
+    <!-- modal toggle -->
+    <script type="text/javascript">
+        $('#newElection').modal('show')
+        $('#newElection').modal('hide')
+        $('#newPosition').modal('show')
+        $('#newPosition').modal('hide')
+    </script>
+
 </div> <!-- /container -->
+
 <script src="/static/js/elections.js"></script>
 <script src="/static/js/positions.js"></script>
 <script type="text/javascript">

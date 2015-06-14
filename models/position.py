@@ -47,8 +47,8 @@ def get_positions_for_election(election_name):
 
 def create_position(user, position):
     election = position['election'].split('-')[0][0:-1]
-    while election.endswith(" "):
-        election = election[:-1]
+
+    election = election.rstrip()
 
     existing = get_positions_for_election(election)
     name_list = []

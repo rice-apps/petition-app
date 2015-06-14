@@ -119,14 +119,6 @@ def get_petitions_for_election(election):
     return result
 
 
-# def get_expired_petitions():
-    # result = []
-    # query = Petition.gql('WHERE date_added < :1', date.today() - timedelta(14))
-    # for petition in query:
-    # result.append(petition.to_json())
-    # return result
-
-
 def delete_petition(petition):
     # Refactored into this method in case there are other things to be done
     # before deleting a petition
