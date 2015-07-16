@@ -104,6 +104,20 @@ class MyPageHandler(webapp2.RequestHandler):
         else:
             self.response.out.write('Success')
 
+    def delete(self):
+        # Authenticate user
+        user = auth.get_logged_in_user()
+        if not user:
+            return self.redirect(ERROR_URI)
+        petition_id = self.request.get('id')
+        petition = models.petition.get_petition(petition_id)
+
+        # Make sure the user is not trying to delete someone else's petition
+        assert petition.user.key() == user.key()
+
+        models.petition.delete_petition(petition)
+        self.response.out.write('Success!')
+
 
 class SignHandler(webapp2.RequestHandler):
     def post(self):
@@ -142,19 +156,3 @@ class UnsignHandler(webapp2.RequestHandler):
 
         else:
             self.response.out.write('You cannot unsign your own petition!')
-
-
-class GarbageHandler(webapp2.RequestHandler):
-    def post(self):
-        # Authenticate user
-        user = auth.get_logged_in_user()
-        if not user:
-            return self.redirect(ERROR_URI)
-        petition_id = self.request.get('id')
-        petition = models.petition.get_petition(petition_id)
-
-        # Make sure the user is not trying to delete someone else's petition
-        assert petition.user.key() == user.key()
-
-        models.petition.delete_petition(petition)
-        self.response.out.write('Success!')

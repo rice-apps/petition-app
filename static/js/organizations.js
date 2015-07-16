@@ -40,11 +40,8 @@ $(function() {
         tr = $(this).parent().parent();
         organization_id = tr.attr('data-id');
         return $.ajax({
-            url: '/organizations/delete',
-            type: 'POST',
-            data: {
-                'id': organization_id
-            },
+            url: '/organizations?id=' + organization_id,
+            type: 'DELETE',
             success: function() {
                 window.location.reload();
                 return alert('Successfully deleted');

@@ -43,10 +43,10 @@
                 'data': JSON.stringify(postData)
             },
             success: function(data) {
+                window.location.reload();
                 if (data == 'Duplicate Petition') {
                     return alert('Duplicate Petition');
                 }
-                window.location.reload();
             }
         });
 
@@ -57,78 +57,13 @@
         tr = $(this).parent().parent();
         petition_id = tr.attr('data-id');
         return $.ajax({
-            url: '/my/delete',
-            type: 'POST',
-            data: {
-                'id': petition_id
-            },
+            url: '/my?id=' + petition_id,
+            type: 'DELETE',
             success: function() {
                 window.location.reload();
                 return alert('Successfully deleted');
             }
         });
     });
-    /*
-    signPetition = function(e) {
-        var petition, petition_id;
-        console.log('Sign Petition Script ran!');
-        petition = $(this).parent();
-        petition_id = petition.attr('data-id');
-        return $.ajax({
-            url: '/petitions/sign',
-            type: 'POST',
-            data: {
-                'id': petition_id
-            },
-            success: function(data) {
-                if (data === 'Successfully signed!') {
-                    return alert('Signed successfully!');
-                }
-                if (data === 'You cannot sign your own petition!') {
-                    return alert('You cannot sign your own petition!');
-                }
-            }
-        });
-    };
-
-    unsignPetition = function(e) {
-        var petition, petition_id;
-        console.log('Unsign Petition Script ran!');
-        petition = $(this).parent();
-        petition_id = petition.attr('data-id');
-        return $.ajax({
-            url: '/petitions/unsign',
-            type: 'POST',
-            data: {
-                'id': petition_id
-            },
-            success: function(data) {
-                if (data === 'Successfully unsigned!') {
-                    return alert('Unsigned successfully!');
-                }
-                if (data === 'You cannot unsign your own petition!') {
-                    return alert('You cannot unsign your own petition!');
-                }
-            }
-        });
-    };
-
-    deletePetition = function(e) {
-        var petition, petition_id;
-        petition = $(this).parent();
-        petition_id = petition.attr('data-id');
-        return $.ajax({
-            url: '/petitions/delete',
-            type: 'POST',
-            data: {
-                'id': petition_id
-            },
-            success: function(data) {
-                if (data === 'Success!') {
-                    return petition.slideUp(500);
-                }
-            }
-        });
-    };*/
 
 }).call(this);

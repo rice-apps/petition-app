@@ -37,7 +37,7 @@ $(function() {
                 'organization_id': $('#organization-data').data('id')
         };
         return $.ajax({
-            url: '/dashboard/saveadmins',
+            url: '/dashboard/admins',
             type: 'POST',
             data: {
                 'data': JSON.stringify(postData)
@@ -95,16 +95,16 @@ $(function() {
             'organization_id': $('#organization-data').data('id')
         };
         return $.ajax({
-            url: '/dashboard/addelection',
+            url: '/dashboard/elections',
             type: 'POST',
             data: {
                 'data': JSON.stringify(postData)
             },
             success: function(data) {
+                window.location.reload();
                 if (data == 'Duplicate Election') {
                     return alert('Duplicate Election');
                 }
-                window.location.reload();
             }
         });
     });
@@ -114,11 +114,8 @@ $(function() {
         tr = $(this).parent().parent();
         election_id = tr.attr('data-id');
         return $.ajax({
-            url: '/dashboard/deleteelection',
-            type: 'POST',
-            data: {
-                'id': election_id
-            },
+            url: '/dashboard/elections?id=' + election_id,
+            type: 'DELETE',
             success: function() {
                 window.location.reload();
                 return alert('Successfully deleted');

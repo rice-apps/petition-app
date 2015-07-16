@@ -38,7 +38,12 @@ class OrganizationsHandler(webapp2.RequestHandler):
             else:
                 organization['dashboard'] = False
 
-        view = pages.render_view(PAGE_URI, {'organizations': organizations, 'is_admin': is_admin})
+        if user.get_id() == ADMIN_ID:
+            admins = ADMIN_ID
+        else:
+            admins = ADMIN_ID + ',' + user.get_id()
+
+        view = pages.render_view(PAGE_URI, {'organizations': organizations, 'is_admin': is_admin, 'admins': admins})
         pages.render_page(self, view)
 
     def post(self):
@@ -58,9 +63,7 @@ class OrganizationsHandler(webapp2.RequestHandler):
         else:
             self.response.out.write('Success')
 
-
-class GarbageHandler(webapp2.RequestHandler):
-    def post(self):
+    def delete(self):
         # Authenticate user
         user = auth.get_logged_in_user()
         if not user:
@@ -81,3 +84,5 @@ class GarbageHandler(webapp2.RequestHandler):
                     models.petition.delete_petition(petition)
             models.election.delete_election(election)
         self.response.out.write('Success!')
+
+

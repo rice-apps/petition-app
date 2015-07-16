@@ -22,6 +22,7 @@ PAGE_URI = '/dashboard'
 ADMIN_ID = 'rsk8'
 ERROR_URI = '/error'
 
+
 class DashboardHandler(webapp2.RequestHandler):
     def get(self):
         user = auth.require_login(self)
@@ -71,7 +72,7 @@ class SaveAdminsHandler(webapp2.RequestHandler):
         self.response.out.write('Success!')
 
 
-class AddElectionHandler(webapp2.RequestHandler):
+class ElectionHandler(webapp2.RequestHandler):
     def post(self):
         user = auth.require_login(self)
         if not user:
@@ -88,9 +89,7 @@ class AddElectionHandler(webapp2.RequestHandler):
         else:
             self.response.out.write('Success')
 
-
-class DeleteElectionHandler(webapp2.RequestHandler):
-    def post(self):
+    def delete(self):
         user = auth.require_login(self)
         if not user:
             return self.redirect(ERROR_URI)

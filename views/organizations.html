@@ -69,11 +69,7 @@
                         <br>
                         <div class="form-group">
                             <!--<label for="input-admins" class="control-label col-sm-2">Admins:</label>-->
-                            {% if is_admin %}
-                            <input id="input-admins" class="form-control" type="hidden" value="{{user_id}}">
-                            {% else %}
-                            <input id="input-admins" class="form-control" type="hidden" value="{{user_id}},{{admin_id}}">
-                            {% endif %}
+                            <input id="input-admins" class="form-control" type="hidden" value="{{admins}}">
                         </div>
                         <button id="add-organization-button" class="btn btn-primary" type="submit" data-dismiss="modal">Add</button>
                     </form>
