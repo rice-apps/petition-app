@@ -20,13 +20,14 @@ import models.organization
 
 PAGE_URI = '/petitions'
 MY_PAGE_URI = '/my'
+ERROR_URI = '/error'
 
 
 class PetitionsHandler(webapp2.RequestHandler):
     def get(self):
         user = auth.require_login(self)
         if not user:
-            return      # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
 
         ongoing_elections = models.election.get_ongoing_elections()
         for election in ongoing_elections:
@@ -61,7 +62,7 @@ class MyPageHandler(webapp2.RequestHandler):
     def get(self):
         user = auth.require_login(self)
         if not user:
-            return      # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
 
         ongoing_elections = models.election.get_ongoing_elections()
         for election in ongoing_elections:
@@ -90,7 +91,7 @@ class MyPageHandler(webapp2.RequestHandler):
         # Authenticate user
         user = auth.get_logged_in_user()
         if not user:
-            return      # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
 
         # Create petition
         data = json.loads(self.request.get('data'))
@@ -108,7 +109,7 @@ class SignHandler(webapp2.RequestHandler):
     def post(self):
         user = auth.get_logged_in_user()
         if not user:
-            return  # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
 
         petition_id = self.request.get('id')
         petition = models.petition.get_petition(petition_id)
@@ -130,7 +131,7 @@ class UnsignHandler(webapp2.RequestHandler):
     def post(self):
         user = auth.get_logged_in_user()
         if not user:
-            return  # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
         petition_id = self.request.get('id')
         petition = models.petition.get_petition(petition_id)
 
@@ -148,7 +149,7 @@ class GarbageHandler(webapp2.RequestHandler):
         # Authenticate user
         user = auth.get_logged_in_user()
         if not user:
-            return      # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
         petition_id = self.request.get('id')
         petition = models.petition.get_petition(petition_id)
 

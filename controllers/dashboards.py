@@ -20,13 +20,13 @@ import models.election
 
 PAGE_URI = '/dashboard'
 ADMIN_ID = 'rsk8'
-
+ERROR_URI = '/error'
 
 class DashboardHandler(webapp2.RequestHandler):
     def get(self):
         user = auth.require_login(self)
         if not user:
-            return  # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
 
         # Get the organization
         organization_id = self.request.get('id')
@@ -61,7 +61,7 @@ class SaveAdminsHandler(webapp2.RequestHandler):
     def post(self):
         user = auth.require_login(self)
         if not user:
-            return  # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
 
         data = json.loads(self.request.get('data'))
         logging.info('Save Admins Post: %s', data)
@@ -75,7 +75,7 @@ class AddElectionHandler(webapp2.RequestHandler):
     def post(self):
         user = auth.require_login(self)
         if not user:
-            return  # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
 
         data = json.loads(self.request.get('data'))
         logging.info('Add Election Post: %s', data)
@@ -93,7 +93,7 @@ class DeleteElectionHandler(webapp2.RequestHandler):
     def post(self):
         user = auth.require_login(self)
         if not user:
-            return  # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
 
         election_id = self.request.get('id')
         election = models.election.get_election(election_id)

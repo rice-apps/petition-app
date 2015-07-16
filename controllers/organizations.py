@@ -18,13 +18,14 @@ import models.petition
 
 PAGE_URI = '/organizations'
 ADMIN_ID = 'rsk8'
+ERROR_URI = '/error'
 
 
 class OrganizationsHandler(webapp2.RequestHandler):
     def get(self):
         user = auth.require_login(self)
         if not user:
-            return  # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
 
         # Get all the organizations
         organizations = models.organization.get_all_organizations()
@@ -44,7 +45,7 @@ class OrganizationsHandler(webapp2.RequestHandler):
         # Authenticate user
         user = auth.get_logged_in_user()
         if not user:
-            return      # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
 
         # Create organization
         data = json.loads(self.request.get('data'))
@@ -63,7 +64,7 @@ class GarbageHandler(webapp2.RequestHandler):
         # Authenticate user
         user = auth.get_logged_in_user()
         if not user:
-            return      # TODO: Should return error message here
+            return self.redirect(ERROR_URI)
         organization_id = self.request.get('id')
         organization = models.organization.get_organization(organization_id)
 

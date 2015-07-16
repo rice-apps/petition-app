@@ -29,6 +29,7 @@ app = webapp2.WSGIApplication([
     ('/dashboard/saveadmins', dashboards.SaveAdminsHandler),
     ('/dashboard/addelection', dashboards.AddElectionHandler),
     ('/dashboard/deleteelection', dashboards.DeleteElectionHandler),
+    ('/error', main.ErrorHandler),
     ('/', main.MainHandler)
 
 ], debug=True)
