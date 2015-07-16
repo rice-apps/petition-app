@@ -128,7 +128,8 @@ class LogoutHandler(webapp2.RequestHandler):
 class LogoutResponseHandler(webapp2.RequestHandler):
     def get(self):
         """Logs out the user."""
-        self.response.out.write('You\'ve been logged out. See you again soon!')   
+        self.response.out.write('You\'ve been logged out. See you again soon!')
+        self.redirect('/')
 
 
 def redirect_to_login(request_handler):
