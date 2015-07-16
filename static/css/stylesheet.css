@@ -31,3 +31,8 @@
 .alert h4 {
   color: black;
 }
+
+#dashboard {
+    width: 800px;
+    left: 50%;
+}

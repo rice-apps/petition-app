@@ -1,32 +1,117 @@
 <div class="container">
-    <div class="navbar navbar-fixed">
-      <div class="container">
-        <div class="nav-collapse collapse">
-          <ul class="nav">
-            <li><a href="/petitions">All Petitions</a></li>
-            <li class="active"><a href="/my">My Petitions</a></li>
-            <li><a href="/elections">Elections</a></li>
-            <li><a href="/authenticate/logout?destination=home">Sign Out</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
+    <div class="row">
+        <div class="span2">
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newPetition">
+                New Petition
+            </button>
+        </div>
+        <div class="span10" id="petitions">
+            <h5>Ongoing Petitions</h5>
+            <table id="ongoing-petitions-table" class="table" data-toggle="table" data-sort-name="organization" data-sort-order="asc">
+                <thead>
+                    <tr>
+                        <th data-field="organization" data-sortable="true">Organization</th>
+                        <th data-field="election" data-sortable="true">Election</th>
+                        <th data-field="position" data-sortable="true">Position</th>
+                        <th data-field="message" data-sortable="false">Message</th>
+                        <th data-field="signatures" data-sortable="true">Number of Signatures</th>
+                        <th data-field="delete" data-sortable="false">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for petition in ongoing_petitions %}
+                        <tr data-id="{{petition.id}}">
+                            <td id="organization">{{petition.organization}}</td>
+                            <td id="election">{{petition.election}}</td>
+                            <td id="position">{{petition.position}}</td>
+                            <td id="message">{{petition.message}}</td>
+                            <td id="signatures">{{petition.signature_num}}</td>
+                            <td><button type="button" class="btn btn-danger deletepetition">Delete</button></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h5>Expired Petitions</h5>
+            <table id="expired-petitions-table" class="table" data-toggle="table" data-sort-name="organization" data-sort-order="asc">
+                <thead>
+                    <tr>
+                        <th data-field="organization" data-sortable="true">Organization</th>
+                        <th data-field="election" data-sortable="true">Election</th>
+                        <th data-field="position" data-sortable="true">Position</th>
+                        <th data-field="message" data-sortable="false">Message</th>
+                        <th data-field="signatures" data-sortable="true">Number of Signatures</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for petition in expired_petitions %}
+                        <tr data-id="{{petition.id}}">
+                            <td id="organization">{{petition.organization}}</td>
+                            <td id="election">{{petition.election}}</td>
+                            <td id="position">{{petition.position}}</td>
+                            <td id="message">{{petition.message}}</td>
+                            <td id="signatures">{{petition.signature_num}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
     </div>
 
-  <div id="petitions">
-	{% if myPetitions|length > 0 %}
-		{% for petition in myPetitions %}
-      <div class="alert" data-id="{{ petition.id }}">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4><b>{{petition.name}} </b>is running for {{petition.organization}}: {{petition.position}}</h4>
-        <h5>Election: {{petition.election}}</h5>
-        <h6>Number of Signatures: {{petition.signature_num}}</h6>
-        <p>{{ petition.message }}</p>
-      </div>
-    {% endfor %}
-	{% endif %}
-	
-    
-  </div>
+    <!-- Modal -->
+    <div class="modal fade" id="newPetition" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="newLabel">New Petition</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="container-narrow well">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="input-name">Your Name:</label>
+                                <input id="input-name" placeholder="Bob Smith" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="input-election">Election:</label>
+                                <select id="input-election">
+                                    <option value="Select an Election" disabled selected>--Select an Election--</option>
+                                    {% for election in ongoing_elections %}
+                                        <option value="{{election.id}}">{{election.title}} by {{election.organization}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Position:</label>
+                                {% for election in ongoing_elections %}
+                                    <select id="{{election.id}}" class="positions">
+                                        <option value="Select an Position" disabled selected>--Select a Position--</option>
+                                        {% for position in election.positions %}
+                                            <option value="{{position}}">{{position}}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                <label for="input-message">Message:</label>
+                                <textarea id="input-message" rows="3" placeholder="Message to your supporters!" class="form-control"></textarea>
+                            </div>
+                            <button id="add-petition-button" class="btn btn-primary" data-dismiss="modal">Add</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal toggle -->
+    <script type="text/javascript">
+		$('#newPetition').modal('show')
+		$('#newPetition').modal('hide')
+    </script>
 
 </div>
 <script src="/static/js/my.js"></script>

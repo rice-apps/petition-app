@@ -13,11 +13,8 @@ class Petition(db.Model):
     
     user = db.ReferenceProperty(User, required=True)
     name = db.StringProperty(required=True)
-    date_added = db.DateProperty(auto_now=True)
-    email = db.StringProperty(required=True)
     message = db.TextProperty()
     election = db.StringProperty(required=True)
-    organization = db.StringProperty(required=True)
     position = db.StringProperty(required=True)
     signature_num = db.IntegerProperty(default=0)
     signatures = db.ListProperty(str)
@@ -27,10 +24,8 @@ class Petition(db.Model):
             'user': self.user,
             'name': self.name,
             'id': str(self.key()),
-            'email': self.email,
             'message': self.message,
             'election': self.election,
-            'organization': self.organization,
             'position': self.position,
             'signature_num': self.signature_num,
             'signatures': self.signatures
@@ -78,21 +73,20 @@ class Petition(db.Model):
 def create_petition(user, petition):
     existing = get_petitions(user)
     name_list = []
-    election = petition['election'].split('-')[0][0:-1]
-    for existing_petition in existing:
-        name_list.append((existing_petition['user'].key(), existing_petition['election'],
-                          existing_petition['organization'], existing_petition['position']))
 
-    petition_tuple = (user.key(), election, petition['organization'], petition['position'])
+    for existing_petition in existing:
+        name_list.append((existing_petition['election'], existing_petition['position']))
+
+    petition_tuple = (petition['election'], petition['position'])
     if petition_tuple not in name_list or not existing:
         petition = Petition(
             user=user,
             name=petition['name'],
-            email=petition['email'],
             message=petition['message'],
-            election=election,
-            organization=petition['organization'],
-            position=petition['position'])
+            election=petition['election'],
+            position=petition['position'],
+            signature_num=0,
+            signatures=[])
         petition.put()
         return petition
     else:
@@ -111,11 +105,12 @@ def get_petition(key):
     return Petition.get(key)
 
 
-def get_petitions_for_election(election):
+def get_petitions_for_position(election_id, position):
     result = []
-    query = Petition.gql('WHERE election = :1', election['title'])
+    query = Petition.gql('WHERE election = :1', election_id)
     for petition in query:
-        result.append(petition.to_json())
+        if position == petition.position:
+            result.append(petition.to_json())
     return result
 
 

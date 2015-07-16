@@ -1,0 +1,137 @@
+<div class="container">
+    <div id="organization-data" data-id="{{organization.id}}">
+        <h3>{{organization.title}} Dashboard</h3>
+        <h4>{{organization.description}}</h4>
+    </div>
+    <div class="row">
+        <div id="admins" class="span3">
+            <h5>Administrators for the Organization</h5>
+            <button id="add-admins-row" type="button" class="btn btn-btn-default">Add Row</button>
+            <button id="delete-admins-row" type="button" class="btn btn-btn-default">Delete Row</button>
+            <table id="admins-table" class="table">
+                {% for admin, bool in organization.admins.items() %}
+                    <tr>
+                        {% if bool %}
+                        <td><input class="form-control input-admin" readonly value="{{admin}}"></td>
+                        {% else %}
+                        <td><input class="form-control input-admin" value="{{admin}}"></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <button id="save-admins" type="button" class="btn btn-primary">Save Changes</button>
+        </div>
+
+        <div class="span7">
+            <div id="ongoing-elections">
+                <h5>Ongoing Elections</h5>
+                <table id="ongoing-elections-table" class="table" data-toggle="table" data-sort-name="end-date" data-sort-order="desc">
+                    <thead>
+                        <tr>
+                            <th data-field="title" data-sortable="true">Election Title</th>
+                            <th data-field="start-date" data-sortable="true">Start Date</th>
+                            <th data-field="end-date" data-sortable="true">End Date</th>
+                            <th data-field="positions" data-sortable="false">Available Positions</th>
+                        </tr>
+                    </thead>
+                    {% for election in ongoing_elections %}
+                        <tr data-id="{{election.id}}">
+                            <td>{{election.title}}</td>
+                            <td>{{election.start_date}}</td>
+                            <td>{{election.end_date}}</td>
+                            <td>
+                                {% for position in election.positions %}
+                                    {{position}}<br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div id="upcoming-elections">
+                <h5>Upcoming Elections</h5>
+                <table id="upcoming-elections" class="table" data-toggle="table" data-sort-name="end-date" data-sort-order="desc">
+                    <thead>
+                        <tr>
+                            <th data-field="title" data-sortable="true">Election Title</th>
+                            <th data-field="start-date" data-sortable="true">Start Date</th>
+                            <th data-field="end-date" data-sortable="true">End Date</th>
+                            <th data-field="positions" data-sortable="false">Available Positions</th>
+                            <th data-field="delete" data-sortable="false">Delete</th>
+                        </tr>
+                    </thead>
+                    {% for election in upcoming_elections %}
+                        <tr data-id="{{election.id}}">
+                            <td>{{election.title}}</td>
+                            <td>{{election.start_date}}</td>
+                            <td>{{election.end_date}}</td>
+                            <td>
+                                {% for position in election.positions %}
+                                    {{position}}<br>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger deleteelection">Delete</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="span2">
+             <button style="float:left;" id="add-election-button" class="btn btn-primary btn-lg" data-toggle="modal"
+                     data-target="#newElection">Add Election</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="newElection" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="newLabel">New Election</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="container-narrow well">
+                        <div class="form-group">
+                            <label for="input-title">Election Name:</label>
+                            <input id="input-title" placeholder="Fall Elections" class="form-control" type="text">
+                        </div>
+                        <p>Choose the start and end date for the election based on the days when you want to accept petitions</p>
+                        <div class="form-group">
+                            <label for="input-start-date">Start Date:</label>
+                            <input id="input-start-date" class="form-control" type="date">
+                        </div>
+                        <div class="form-group">
+                            <label for="input-end-date">End Date:</label>
+                            <input id="input-end-date" class="form-control" type="date">
+                        </div>
+                        <div class="form-group">
+                            <label for="input-positions">Positions:</label>
+                            <button id="add-positions-row" type="button" class="btn btn-btn-default">Add Row</button>
+                            <button id="delete-positions-row" type="button" class="btn btn-btn-default">Delete Row</button>
+                            <table id="input-positions-table" class="table">
+                                <tr>
+                                    <td><input class="form-control input-position" type="text"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <button id="submit-election-button" class="btn btn-primary" type="submit" data-dismiss="modal">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal toggle -->
+    <script type="text/javascript">
+        $('#newElection').modal('show');
+        $('#newElection').modal('hide');
+    </script>
+
+</div>
+
+<script src="/static/js/dashboards.js"></script>

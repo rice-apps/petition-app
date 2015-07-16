@@ -8,6 +8,7 @@ import json
 import logging
 import pages
 import webapp2
+from datetime import date
 from  mail import sendConfirmation
 
 from authentication import auth
@@ -15,7 +16,7 @@ from models.user import User
 
 import models.petition
 import models.election
-import models.position
+import models.organization
 
 PAGE_URI = '/petitions'
 MY_PAGE_URI = '/my'
@@ -26,15 +27,63 @@ class PetitionsHandler(webapp2.RequestHandler):
         user = auth.require_login(self)
         if not user:
             return      # TODO: Should return error message here
-        ongoingElections = models.election.get_ongoing_elections()
-        effectivePetitions = []
-        for election in ongoingElections:
-            petition = models.petition.get_petitions_for_election(election)
-            if len(petition) > 0:
-                effectivePetitions.append(petition[0])
-        logging.info("effective petitions: %s", effectivePetitions)
-        view = pages.render_view(PAGE_URI, {'effectivePetitions': effectivePetitions,
-                                            'ongoingElections': ongoingElections})
+
+        ongoing_elections = models.election.get_ongoing_elections()
+        for election in ongoing_elections:
+            organization = models.organization.get_organization(election['organization'])
+            election['organization'] = organization.title
+
+        logging.info("Ongoing Elections: %s", ongoing_elections)
+
+        petitions = {}
+        for election in ongoing_elections:
+            election_id = election['id']
+            petitions[election['title']] = {}
+            for position in election['positions']:
+                petitions[election['title']][position] = models.petition.get_petitions_for_position(election_id,
+                                                                                                    position)
+                for petition in petitions[election['title']][position]:
+                    if petition['user'].get_id() == user.get_id():
+                        petition['own'] = True
+                    else:
+                        petition['own'] = False
+                    if user.get_id() in petition['signatures']:
+                        petition['signed'] = True
+                    else:
+                        petition['signed'] = False
+
+        logging.info("Petitions: %s", petitions)
+        view = pages.render_view(PAGE_URI, {'petitions': petitions, 'ongoing_elections': ongoing_elections})
+        pages.render_page(self, view)
+
+
+class MyPageHandler(webapp2.RequestHandler):
+    def get(self):
+        user = auth.require_login(self)
+        if not user:
+            return      # TODO: Should return error message here
+
+        ongoing_elections = models.election.get_ongoing_elections()
+        for election in ongoing_elections:
+            organization = models.organization.get_organization(election['organization'])
+            election['organization'] = organization.title
+
+        petitions = models.petition.get_petitions(user)
+        expired_petitions = []
+        ongoing_petitions = []
+        for petition in petitions:
+            election = models.election.get_election(petition['election'])
+            petition['election'] = election.title
+            organization = models.organization.get_organization(election.organization)
+            petition['organization'] = organization.title
+            if election.end_date < date.today():
+                expired_petitions.append(petition)
+            else:
+                ongoing_petitions.append(petition)
+
+        view = pages.render_view(MY_PAGE_URI, {'expired_petitions': expired_petitions,
+                                               'ongoing_petitions': ongoing_petitions,
+                                               'ongoing_elections': ongoing_elections})
         pages.render_page(self, view)
 
     def post(self):
@@ -42,6 +91,7 @@ class PetitionsHandler(webapp2.RequestHandler):
         user = auth.get_logged_in_user()
         if not user:
             return      # TODO: Should return error message here
+
         # Create petition
         data = json.loads(self.request.get('data'))
         logging.info('Petition Post: %s', data)
@@ -49,18 +99,9 @@ class PetitionsHandler(webapp2.RequestHandler):
 
         # Respond
         if not petition:
-            data['id'] = 'Duplicate Petition'
+            self.response.out.write('Duplicate Petition')
         else:
-            data['id'] = str(petition.key())
-        self.response.out.write(json.dumps(data))
-
-
-class MyPageHandler(webapp2.RequestHandler):
-    def get(self):
-        user = auth.require_login(self)
-        myPetitions = models.petition.get_petitions(user)
-        view = pages.render_view(MY_PAGE_URI, {'myPetitions': myPetitions})
-        pages.render_page(self, view)
+            self.response.out.write('Success')
 
 
 class SignHandler(webapp2.RequestHandler):
@@ -93,7 +134,7 @@ class UnsignHandler(webapp2.RequestHandler):
         petition_id = self.request.get('id')
         petition = models.petition.get_petition(petition_id)
 
-        # Ensures you cannot unvote your own petition. You never voted in the first place.
+        # Ensures you cannot unsign your own petition. You never voted in the first place.
         if user.get_id() != petition.get_user().get_id():
             models.petition.unsign_petition(user, petition)
             self.response.out.write('Successfully unsigned!')
@@ -116,17 +157,3 @@ class GarbageHandler(webapp2.RequestHandler):
 
         models.petition.delete_petition(petition)
         self.response.out.write('Success!')
-
-
-class PositionsPopulateHandler(webapp2.RequestHandler):
-    def post(self):
-        user = auth.get_logged_in_user()
-        if not user:
-            return  # TODO: Should return error message here
-        election_name = self.request.get('election')
-
-        current_positions = models.position.get_positions_for_election(election_name)
-        data = []
-        for current_position in current_positions:
-            data.append(str(current_position['title']))
-        self.response.out.write(data)
