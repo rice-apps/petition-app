@@ -1,40 +1,16 @@
+.body {
+    vertical-align: middle;
+}
 
 .container-narrow {
     margin: 0 auto;
-    max-width: 312px;
+    max-width: 400px;
     margin-bottom: 40px;
 }
 
-.wow {
-    text-align: center;
-}
-
-.sticky {
-}
-
-#add-button, #add-election-button {
-    margin-top: 10px;
+#add-election-button {
+    height: 100%;
     float: right;
-}
-
-.alert {
-  color: black;
-  background-color: #C2FFEB;
-}
-
-.alert-info {
-	background-color: white;
-	height: 30px;
-	margin-bottom: 1px;
-}
-
-.alert h4 {
-  color: black;
-}
-
-#dashboard {
-    width: 800px;
-    left: 50%;
 }
 
 #errorimage {
@@ -46,3 +22,17 @@
     margin-left: auto;
     margin-right: auto
 }
+
+.modal{
+    display: block;
+}
+
+#ongoing-elections, #upcoming-elections, #ongoing-petitions, #expired-petitions {
+    padding: 10px;
+    margin: 0 auto;
+}
+
+.jumbotron {
+    text-align: center;
+}
+

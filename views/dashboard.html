@@ -1,30 +1,40 @@
 <div class="container">
     <div id="organization-data" data-id="{{organization.id}}">
-        <h3>{{organization.title}} Dashboard</h3>
-        <h4>{{organization.description}}</h4>
+        <h2>{{organization.title}} Dashboard</h2>
+        <h3>{{organization.description}}</h3>
     </div>
     <div class="row">
         <div id="admins" class="span3">
-            <h5>Administrators for the Organization</h5>
-            <button id="add-admins-row" type="button" class="btn btn-btn-default">Add Row</button>
-            <button id="delete-admins-row" type="button" class="btn btn-btn-default">Delete Row</button>
-            <table id="admins-table" class="table">
-                {% for admin, bool in organization.admins.items() %}
-                    <tr>
-                        {% if bool %}
-                        <td><input class="form-control input-admin" readonly value="{{admin}}"></td>
-                        {% else %}
-                        <td><input class="form-control input-admin" value="{{admin}}"></td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </table>
-            <button id="save-admins" type="button" class="btn btn-primary">Save Changes</button>
+            <div class="panel panel-default">
+                <div class="panel-heading">Administrators for the Organization</div>
+                <div class="panel-body">
+                    <p class="text-danger">You cannot delete yourself or the website administrator from the administrator list.</p>
+                    <button id="add-admins-row" type="button" class="btn"><span class="glyphicon glyphicon-plus"></span></button>
+                    <table id="admins-table" class="table">
+                        {% for admin, bool in organization.admins.items() %}
+                        <tr>
+                            {% if bool %}
+                            <td><input class="form-control input-admin" readonly value="{{admin}}"></td>
+                            <td></td>
+                            {% else %}
+                            <td><input class="form-control input-admin" value="{{admin}}"></td>
+                            <td><button type="button" class="btn delete-admins-row">
+                                <span class="glyphicon glyphicon-remove"></span></button></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div class="panel-footer">
+                    <button id="save-admins" type="button" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
         </div>
 
-        <div class="span7">
+        <div class="span6">
             <div id="ongoing-elections">
-                <h5>Ongoing Elections</h5>
+                <h4>Ongoing Elections</h4>
+                <p class="text-danger">Note: Ongoing Elections cannot be deleted</p>
                 <table id="ongoing-elections-table" class="table" data-toggle="table" data-sort-name="end-date" data-sort-order="desc">
                     <thead>
                         <tr>
@@ -49,7 +59,7 @@
                 </table>
             </div>
             <div id="upcoming-elections">
-                <h5>Upcoming Elections</h5>
+                <h4>Upcoming Elections</h4>
                 <table id="upcoming-elections" class="table" data-toggle="table" data-sort-name="end-date" data-sort-order="desc">
                     <thead>
                         <tr>
@@ -79,13 +89,13 @@
             </div>
         </div>
         <div class="span2">
-             <button style="float:left;" id="add-election-button" class="btn btn-primary btn-lg" data-toggle="modal"
+             <button id="add-election-button" class="btn btn-primary" data-toggle="modal"
                      data-target="#newElection">Add Election</button>
         </div>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="newElection" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true" style="display: block;">
+    <div class="modal fade" id="newElection" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -111,11 +121,13 @@
                         </div>
                         <div class="form-group">
                             <label for="input-positions">Positions:</label>
-                            <button id="add-positions-row" type="button" class="btn btn-btn-default">Add Row</button>
-                            <button id="delete-positions-row" type="button" class="btn btn-btn-default">Delete Row</button>
+                            <button id="add-positions-row" type="button" class="btn">
+                                <span class="glyphicon glyphicon-plus"></span></button>
                             <table id="input-positions-table" class="table">
                                 <tr>
                                     <td><input class="form-control input-position" type="text"></td>
+                                    <td><button type="button" class="btn delete-positions-row">
+                                        <span class="glyphicon glyphicon-remove"></span></button></td>
                                 </tr>
                             </table>
                         </div>

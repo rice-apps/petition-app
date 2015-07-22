@@ -22,6 +22,7 @@ app = webapp2.WSGIApplication([
     ('/petitions/sign', petitions.SignHandler),
     ('/petitions/unsign', petitions.UnsignHandler),
     ('/my', petitions.MyPageHandler),
+    ('/my/positions', petitions.PositionsHandler),
     ('/organizations', organizations.OrganizationsHandler),
     ('/dashboard', dashboards.DashboardHandler),
     ('/dashboard/admins', dashboards.SaveAdminsHandler),

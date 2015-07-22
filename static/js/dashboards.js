@@ -1,27 +1,29 @@
 $(function() {
     $('#add-positions-row').on('click', function() {
-        var htmlstr = '<tr><td><input class="form-control input-position" type="text"></td></tr>';
+        var htmlstr = '<tr><td><input class="form-control input-position" type="text"></td>' +
+            '<td><button type="button" class="btn delete-positions-row">' +
+            '<span class="glyphicon glyphicon-remove"></span></button></td></tr>';
         $('#input-positions-table').append(htmlstr);
+        return $('button[class="btn delete-positions-row"]').on('click', deletePosition);
     });
 
-    $('#delete-positions-row').on('click', function() {
-        $('#input-positions-table tr:last').remove();
-    });
+    $('button[class="btn delete-positions-row"]').on('click', deletePosition);
+    var deletePosition = function() {
+        $(this).parent().parent().remove();
+    };
 
     $('#add-admins-row').on('click', function() {
-        var htmlstr = '<tr><td><input class="form-control input-positions"></td></tr>';
+        var htmlstr = '<tr><td><input class="form-control input-admin"></td>' +
+            '<td><button type="button" class="btn delete-admins-row">' +
+            '<span class="glyphicon glyphicon-remove"></span></button></td></tr>';
         $('#admins-table').append(htmlstr);
+        return $('button[class="btn delete-admins-row"]').on('click', deleteAdmin);
     });
 
-    $('#delete-admins-row').on('click', function() {
-        var last_row, form_control;
-
-        last_row = $('#admins-table tr:last');
-        form_control = last_row.children().children();
-        if (!form_control[0].readOnly) {
-            last_row.remove()
-        }
-    });
+    $('button[class="btn delete-admins-row"]').on('click', deleteAdmin);
+    var deleteAdmin = function() {
+        $(this).parent().parent().remove();
+    };
 
     $('#save-admins').on('click', function() {
         var fields, i, n, postData;

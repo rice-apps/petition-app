@@ -156,3 +156,14 @@ class UnsignHandler(webapp2.RequestHandler):
 
         else:
             self.response.out.write('You cannot unsign your own petition!')
+
+
+class PositionsHandler(webapp2.RequestHandler):
+    def post(self):
+        user = auth.get_logged_in_user()
+        if not user:
+            return self.redirect(ERROR_URI)
+        election_id = self.request.get('id')
+        election = models.election.get_election(election_id)
+
+        self.response.out.write(json.dumps(election.get_positions()))

@@ -28,6 +28,9 @@ class Election(db.Model):
     def get_title(self):
         return self.title
 
+    def get_positions(self):
+        return self.positions
+
 
 def get_election(key):
     return Election.get(key)

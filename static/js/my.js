@@ -2,38 +2,42 @@
     $('.positions').hide();
 
     $('#input-election').on('change', function(){
-        $('.positions').hide();
         var election_id = $('#input-election').val();
-        $('#' + election_id).show();
+        return $.ajax({
+            url: '/my/positions',
+            type: 'POST',
+            data: {
+                'id': election_id
+            },
+            success: function(data) {
+                var response, htmlstr, i;
+                response = JSON.parse(data);
+                htmlstr = '<option value="Select a Position" disabled selected>--Select a Position--</option>';
+                for (i = 0; i < response.length; i++) {
+                    htmlstr += '<option value="' + response[i] + '">' + response[i] + '</option>';
+                }
+                $("select[name='input-position']").find('option').remove().end().append($(htmlstr));
+            }
+        });
     });
 
     $('#add-petition-button').on('click', function() {
-        var i, n, field, fields, postData, field_names, position;
-        field_names = ['Name', 'Election'];
-        fields = [$('#input-name'), $('#input-election')];
+        var i, n, field, fields, postData, field_names;
+        field_names = ['Name', 'Election', 'Position', 'Message'];
+        fields = [$('#input-name'), $('#input-election'), $('#input-position'), $('#input-message')];
         for (i = 0, n = fields.length; i < n; i++) {
             field = fields[i];
-            if (field.val().trim() === "") {
+            if (field.val().trim() === "" && field_names[i] != 'Message') {
                 alert('Missing: ' + field_names[i]);
                 return;
             }
         }
 
-        $('.positions').each(function() {
-            if ($(this).val() != null)
-                position = $(this).val();
-        });
-
-        if (!position) {
-            alert('Missing: Position');
-            return;
-        }
-
         postData = {
             'name': fields[0].val(),
             'election': fields[1].val(),
-            'position': position,
-            'message': $('#input-message').val()
+            'position': fields[2].val(),
+            'message': fields[3].val()
         };
 
         return $.ajax({

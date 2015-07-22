@@ -25,11 +25,12 @@ $(function() {
                 'data': JSON.stringify(postData)
             },
             success: function(data) {
+                window.location.reload();
                 if (data == 'Duplicate Organization') {
                     return alert('Duplicate Organization');
                 }
                 else {
-                    window.location.reload();
+                    return alert('Successfully added!');
                 }
             }
         });

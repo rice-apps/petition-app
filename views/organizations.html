@@ -2,12 +2,12 @@
     <div class="row">
         <div class="span2">
             {% if is_admin %}
-                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newOrganization">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newOrganization">
                     New Organization
                 </button>
                 <br>
                 <br>
-                <p>Only the administrator can add or remove organizations</p>
+                <p class="text-danger">Only the administrator can add or remove organizations</p>
             {% endif %}
 
         </div>
@@ -46,7 +46,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="newOrganization" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true" style="display: block;">
+    <div class="modal fade" id="newOrganization" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
