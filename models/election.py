@@ -6,7 +6,7 @@ __author__ = 'Roshni Kaushik <rsk8@rice.edu>'
 
 from google.appengine.ext import db
 from user import User
-from datetime import date, timedelta
+from datetime import date
 
 
 class Election(db.Model):
@@ -15,12 +15,13 @@ class Election(db.Model):
     start_date = db.DateProperty(required=True)
     end_date = db.DateProperty(required=True)
     organization = db.StringProperty(required=True)
-    positions = db.ListProperty(str)
+    positions = db.ListProperty(str, required=True)
+    threshold = db.IntegerProperty(required=True)
 
     def to_json(self):
         return {'user': self.user.get_id(), 'title': self.title, 'id': str(self.key()),
                 'organization': self.organization, 'start_date': self.start_date, 'end_date': self.end_date,
-                'positions': self.positions}
+                'positions': self.positions, 'threshold': self.threshold}
 
     def get_organization(self):
         return self.organization
@@ -30,6 +31,9 @@ class Election(db.Model):
 
     def get_positions(self):
         return self.positions
+
+    def get_threshold(self):
+        return self.threshold
 
 
 def get_election(key):
@@ -70,7 +74,8 @@ def create_election(user, election):
             start_date=start_date,
             end_date=end_date,
             organization=election['organization_id'],
-            positions=election['positions'])
+            positions=election['positions'],
+            threshold=int(election['threshold']))
         election.put()
         return election
     else:
@@ -91,9 +96,7 @@ def convert_to_date(date1):
 
 def get_organization_elections(organization_id):
     result = []
-    # Ongoing and Upcoming Elections
-    query = Election.gql('WHERE end_date >= :1', date.today())
+    query = Election.gql('WHERE organization = :1', organization_id)
     for election in query:
-        if election.organization == organization_id:
-            result.append(election.to_json())
+        result.append(election.to_json())
     return result

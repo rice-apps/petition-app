@@ -1,4 +1,5 @@
 $(function() {
+    var deletePosition, deleteAdmin;
     $('#add-positions-row').on('click', function() {
         var htmlstr = '<tr><td><input class="form-control input-position" type="text"></td>' +
             '<td><button type="button" class="btn delete-positions-row">' +
@@ -7,10 +8,11 @@ $(function() {
         return $('button[class="btn delete-positions-row"]').on('click', deletePosition);
     });
 
-    $('button[class="btn delete-positions-row"]').on('click', deletePosition);
-    var deletePosition = function() {
+    deletePosition = function() {
         $(this).parent().parent().remove();
     };
+    $('button[class="btn delete-positions-row"]').on('click', deletePosition);
+
 
     $('#add-admins-row').on('click', function() {
         var htmlstr = '<tr><td><input class="form-control input-admin"></td>' +
@@ -20,10 +22,11 @@ $(function() {
         return $('button[class="btn delete-admins-row"]').on('click', deleteAdmin);
     });
 
-    $('button[class="btn delete-admins-row"]').on('click', deleteAdmin);
-    var deleteAdmin = function() {
+    deleteAdmin = function() {
         $(this).parent().parent().remove();
     };
+    $('button[class="btn delete-admins-row"]').on('click', deleteAdmin);
+
 
     $('#save-admins').on('click', function() {
         var fields, i, n, postData;
@@ -54,8 +57,8 @@ $(function() {
     $('#submit-election-button').on('click', function(e) {
         var field, fields, field_names, i, n;
         e.preventDefault();
-        field_names = ['Election Name', 'Start Date', 'End Date'];
-        fields = [$('#input-title'), $('#input-start-date'), $('#input-end-date')];
+        field_names = ['Election Name', 'Start Date', 'End Date', 'Threshold'];
+        fields = [$('#input-title'), $('#input-start-date'), $('#input-end-date'), $('#input-threshold')];
         for (i = 0, n = fields.length; i < n; i++) {
             field = fields[i];
             if (field.val().trim() === "") {
@@ -94,7 +97,8 @@ $(function() {
             'start_date': fields[1].val().trim(),
             'end_date': fields[2].val().trim(),
             'positions': positions,
-            'organization_id': $('#organization-data').data('id')
+            'organization_id': $('#organization-data').data('id'),
+            'threshold': fields[3].val()
         };
         return $.ajax({
             url: '/dashboard/elections',

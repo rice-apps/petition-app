@@ -10,6 +10,7 @@ import webapp2
 PAGE_URI = '/main'
 ERROR_URI = '/error'
 
+
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         view = pages.render_view(PAGE_URI)

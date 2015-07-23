@@ -17,6 +17,7 @@ from authentication import auth
 import models.organization
 import models.user
 import models.election
+import models.petition
 
 PAGE_URI = '/dashboard'
 ADMIN_ID = 'rsk8'
@@ -46,15 +47,28 @@ class DashboardHandler(webapp2.RequestHandler):
         elections = models.election.get_organization_elections(organization['id'])
         ongoing_elections = []
         upcoming_elections = []
+        expired_elections = []
         for election in elections:
-            if election['start_date'] < datetime.date.today():
-                ongoing_elections.append(election)
-            else:
+            positions = {}
+            for position in election['positions']:
+                petitions = models.petition.get_petitions_for_position(election['id'], position)
+                for petition in petitions:
+                    petition['signatures_left'] = election['threshold'] - petition['signature_num']
+                    if petition['signatures_left'] < 0:
+                        petition['signatures_left'] = 0
+                positions[position] = petitions
+            election['positions'] = positions
+            if election['start_date'] > datetime.date.today():
                 upcoming_elections.append(election)
+            elif election['end_date'] < datetime.date.today():
+                expired_elections.append(election)
+            else:
+                ongoing_elections.append(election)
         logging.info("Elections: %s", elections)
 
         view = pages.render_view(PAGE_URI, {'organization': organization, 'ongoing_elections': ongoing_elections,
-                                            'upcoming_elections': upcoming_elections})
+                                            'upcoming_elections': upcoming_elections,
+                                            'expired_elections': expired_elections})
         pages.render_page(self, view)
 
 

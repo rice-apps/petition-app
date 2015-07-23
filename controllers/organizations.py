@@ -8,7 +8,6 @@ import json
 import logging
 import pages
 import webapp2
-# from  mail import sendConfirmation
 
 from authentication import auth
 import models.organization
@@ -84,5 +83,3 @@ class OrganizationsHandler(webapp2.RequestHandler):
                     models.petition.delete_petition(petition)
             models.election.delete_election(election)
         self.response.out.write('Success!')
-
-

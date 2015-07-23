@@ -1,98 +1,216 @@
 <div class="container">
     <div id="organization-data" data-id="{{organization.id}}">
-        <h2>{{organization.title}} Dashboard</h2>
-        <h3>{{organization.description}}</h3>
+        <h3>{{organization.title}} Dashboard</h3>
+        <h4>{{organization.description}}</h4>
     </div>
     <div class="row">
         <div id="admins" class="span3">
-            <div class="panel panel-default">
-                <div class="panel-heading">Administrators for the Organization</div>
-                <div class="panel-body">
-                    <p class="text-danger">You cannot delete yourself or the website administrator from the administrator list.</p>
-                    <button id="add-admins-row" type="button" class="btn"><span class="glyphicon glyphicon-plus"></span></button>
-                    <table id="admins-table" class="table">
-                        {% for admin, bool in organization.admins.items() %}
-                        <tr>
-                            {% if bool %}
-                            <td><input class="form-control input-admin" readonly value="{{admin}}"></td>
-                            <td></td>
-                            {% else %}
-                            <td><input class="form-control input-admin" value="{{admin}}"></td>
-                            <td><button type="button" class="btn delete-admins-row">
-                                <span class="glyphicon glyphicon-remove"></span></button></td>
-                            {% endif %}
-                        </tr>
+                <button id="add-election-button" class="btn btn-primary" data-toggle="modal"
+                         data-target="#newElection">Add Election</button>
+                <h4>Administrators for the Organization</h4>
+                <p class="text-danger">You cannot delete yourself or the website administrator from the administrator list.</p>
+                <button id="add-admins-row" type="button" class="btn"><span class="glyphicon glyphicon-plus"></span></button>
+                <table id="admins-table" class="table">
+                    {% for admin, bool in organization.admins.items() %}
+                    <tr>
+                        {% if bool %}
+                        <td><input class="form-control input-admin" readonly value="{{admin}}"></td>
+                        <td></td>
+                        {% else %}
+                        <td><input class="form-control input-admin" value="{{admin}}"></td>
+                        <td><button type="button" class="btn delete-admins-row">
+                            <span class="glyphicon glyphicon-remove"></span></button></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            <button id="save-admins" type="button" class="btn btn-primary">Save Changes</button>
+        </div>
+        <div class="span9">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#ongoing-elections-tab" aria-controls="ongoing-elections"
+                                                          role="tab" data-toggle="tab">Ongoing Elections</a></li>
+                <li role="presentation"><a href="#upcoming-elections-tab" aria-controls="upcoming-elections"
+                                           role="tab" data-toggle="tab">Upcoming Elections</a></li>
+                <li role="presentation"><a href="#expired-elections-tab" aria-controls="expired-elections"
+                                           role="tab" data-toggle="tab">Expired Elections</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="ongoing-elections-tab">
+                    <h6 class="text-danger">Note: Ongoing Elections cannot be deleted</h6>
+                    <table id="ongoing-elections-table" class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Election Title</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Signature Threshold</th>
+                            </tr>
+                        </thead>
+                        {% for election in ongoing_elections %}
+                            <tr data-id="{{election.id}}">
+                                <td><span class="glyphicon glyphicon-plus"  data-toggle="collapse"
+                                          data-target="#{{election.id}}-positions"></span></td>
+                                <td>{{election.title}}</td>
+                                <td>{{election.start_date}}</td>
+                                <td>{{election.end_date}}</td>
+                                <td>{{election.threshold}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="hiddenRow">
+                                    <div class="accordian-body collapse" id="{{election.id}}-positions">
+                                        {% for position, petitions in election.positions.items() %}
+                                            <h6>Position: {{position}}</h6>
+                                                {% if petitions|length == 0 %}
+                                                    <p class="text-danger">No petitions for this position!</p>
+                                                {% else %}
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Petition Creator</th>
+                                                                <th>Message</th>
+                                                                <th>Signatures Remaining</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for petition in petitions %}
+                                                                <tr>
+                                                                    <td>{{petition.name}}</td>
+                                                                    <td>{{petition.message}}</td>
+                                                                    <td>{{petition.signatures_left}}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
                         {% endfor %}
                     </table>
                 </div>
-                <div class="panel-footer">
-                    <button id="save-admins" type="button" class="btn btn-primary">Save Changes</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="span6">
-            <div id="ongoing-elections">
-                <h4>Ongoing Elections</h4>
-                <p class="text-danger">Note: Ongoing Elections cannot be deleted</p>
-                <table id="ongoing-elections-table" class="table" data-toggle="table" data-sort-name="end-date" data-sort-order="desc">
+                <div role="tabpanel" class="tab-pane" id="upcoming-elections-tab">
+                    <table id="upcoming-elections" class="table">
                     <thead>
                         <tr>
-                            <th data-field="title" data-sortable="true">Election Title</th>
-                            <th data-field="start-date" data-sortable="true">Start Date</th>
-                            <th data-field="end-date" data-sortable="true">End Date</th>
-                            <th data-field="positions" data-sortable="false">Available Positions</th>
-                        </tr>
-                    </thead>
-                    {% for election in ongoing_elections %}
-                        <tr data-id="{{election.id}}">
-                            <td>{{election.title}}</td>
-                            <td>{{election.start_date}}</td>
-                            <td>{{election.end_date}}</td>
-                            <td>
-                                {% for position in election.positions %}
-                                    {{position}}<br>
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-            <div id="upcoming-elections">
-                <h4>Upcoming Elections</h4>
-                <table id="upcoming-elections" class="table" data-toggle="table" data-sort-name="end-date" data-sort-order="desc">
-                    <thead>
-                        <tr>
-                            <th data-field="title" data-sortable="true">Election Title</th>
-                            <th data-field="start-date" data-sortable="true">Start Date</th>
-                            <th data-field="end-date" data-sortable="true">End Date</th>
-                            <th data-field="positions" data-sortable="false">Available Positions</th>
-                            <th data-field="delete" data-sortable="false">Delete</th>
+                            <th></th>
+                            <th>Election Title</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Signature Threshold</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     {% for election in upcoming_elections %}
                         <tr data-id="{{election.id}}">
+                            <td><span class="glyphicon glyphicon-plus"  data-toggle="collapse"
+                                          data-target="#{{election.id}}-positions"></span></td>
                             <td>{{election.title}}</td>
                             <td>{{election.start_date}}</td>
                             <td>{{election.end_date}}</td>
-                            <td>
-                                {% for position in election.positions %}
-                                    {{position}}<br>
-                                {% endfor %}
-                            </td>
+                            <td>{{election.threshold}}</td>
                             <td>
                                 <button type="button" class="btn btn-danger deleteelection">Delete</button>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="6" class="hiddenRow">
+                                <div class="accordian-body collapse" id="{{election.id}}-positions">
+                                    {% for position, petitions in election.positions.items() %}
+                                        <h6>Position: {{position}}</h6>
+                                            {% if petitions|length == 0 %}
+                                                    <p class="text-danger">No petitions for this position!</p>
+                                            {% else %}
+                                                <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Petition Creator</th>
+                                                                <th>Message</th>
+                                                                <th>Signatures Remaining</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for petition in petitions %}
+                                                                <tr>
+                                                                    <td>{{petition.name}}</td>
+                                                                    <td>{{petition.message}}</td>
+                                                                    <td>{{petition.signatures_left}}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                            {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
                     {% endfor %}
-                </table>
+                    </table>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="expired-elections-tab">
+                    <h6 class="text-danger">Note: Expired Elections cannot be deleted</h6>
+                    <table id="expired-elections" class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Election Title</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Signature Threshold</th>
+                            </tr>
+                        </thead>
+                        {% for election in expired_elections %}
+                            <tr data-id="{{election.id}}">
+                                <td><span class="glyphicon glyphicon-plus"  data-toggle="collapse"
+                                          data-target="#{{election.id}}-positions"></span></td>
+                                <td>{{election.title}}</td>
+                                <td>{{election.start_date}}</td>
+                                <td>{{election.end_date}}</td>
+                                <td>{{election.threshold}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="hiddenRow">
+                                    <div class="accordian-body collapse" id="{{election.id}}-positions">
+                                        {% for position, petitions in election.positions.items() %}
+                                            <h6>Position: {{position}}</h6>
+                                                {% if petitions|length == 0 %}
+                                                    <p class="text-danger">No petitions for this position!</p>
+                                                {% else %}
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Petition Creator</th>
+                                                                <th>Message</th>
+                                                                <th>Signatures Remaining</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for petition in petitions %}
+                                                                <tr>
+                                                                    <td>{{petition.name}}</td>
+                                                                    <td>{{petition.message}}</td>
+                                                                    <td>{{petition.signatures_left}}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
         </div>
-        <div class="span2">
-             <button id="add-election-button" class="btn btn-primary" data-toggle="modal"
-                     data-target="#newElection">Add Election</button>
-        </div>
     </div>
+</div>
 
     <!-- Modal -->
     <div class="modal fade" id="newElection" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true">
@@ -105,31 +223,46 @@
                     <h4 class="modal-title" id="newLabel">New Election</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" class="container-narrow well">
+                    <form role="form" class="form-horizontal">
                         <div class="form-group">
-                            <label for="input-title">Election Name:</label>
-                            <input id="input-title" placeholder="Fall Elections" class="form-control" type="text">
+                            <label for="input-title" class="control-label col-sm-2">Election Name:</label>
+                            <div class="col-sm-10">
+                                <input id="input-title" placeholder="Fall Elections" class="form-control" type="text">
+                            </div>
                         </div>
-                        <p>Choose the start and end date for the election based on the days when you want to accept petitions</p>
+                        <p class="text-info text-center">Choose the start and end date for the election based on the days when you want to accept petitions</p>
                         <div class="form-group">
-                            <label for="input-start-date">Start Date:</label>
-                            <input id="input-start-date" class="form-control" type="date">
+                            <label for="input-start-date" class="control-label col-sm-2">Start Date:</label>
+                            <div class="col-sm-10">
+                                <input id="input-start-date" class="form-control" type="date">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-end-date">End Date:</label>
-                            <input id="input-end-date" class="form-control" type="date">
+                            <label for="input-end-date" class="control-label col-sm-2">End Date:</label>
+                            <div class="col-sm-10">
+                                <input id="input-end-date" class="form-control" type="date">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="input-positions">Positions:</label>
-                            <button id="add-positions-row" type="button" class="btn">
-                                <span class="glyphicon glyphicon-plus"></span></button>
-                            <table id="input-positions-table" class="table">
-                                <tr>
-                                    <td><input class="form-control input-position" type="text"></td>
-                                    <td><button type="button" class="btn delete-positions-row">
-                                        <span class="glyphicon glyphicon-remove"></span></button></td>
-                                </tr>
-                            </table>
+                            <label for="input-threshold" class="control-label col-sm-2">Signature Threshold:</label>
+                            <div class="col-sm-10">
+                                <p class="text-info">Choose the number of signatures necessary for a petition</p>
+                                <input id="input-threshold" class="form-control" type="number">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-position" class="control-label col-sm-2">Positions:</label>
+                            <div class="col-sm-10">
+                                <button id="add-positions-row" type="button" class="btn">
+                                    <span class="glyphicon glyphicon-plus"></span></button>
+                                <table id="input-positions-table" class="table">
+                                    <tr>
+                                        <td><input class="form-control input-position" type="text"></td>
+                                        <td><button type="button" class="btn delete-positions-row">
+                                            <span class="glyphicon glyphicon-remove"></span></button></td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                         <button id="submit-election-button" class="btn btn-primary" type="submit" data-dismiss="modal">Add</button>
                     </form>
@@ -143,7 +276,5 @@
         $('#newElection').modal('show');
         $('#newElection').modal('hide');
     </script>
-
-</div>
 
 <script src="/static/js/dashboards.js"></script>

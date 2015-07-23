@@ -9,7 +9,7 @@
                     <th data-field="position" data-sortable="true">Position</th>
                     <th data-field="name" data-sortable="true">Petition Creator</th>
                     <th data-field="message" data-sortable="false">Message</th>
-                    <th data-field="signatures" data-sortable="true">Number of Signatures</th>
+                    <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
                     <th data-field="sign" data-sortable="false">Signed</th>
                 </tr>
             </thead>
@@ -23,7 +23,13 @@
                                 <td>{{position}}</td>
                                 <td>{{petition.name}}</td>
                                 <td>{{petition.message}}</td>
-                                <td>{{petition.signature_num}}</td>
+                                <td>
+                                    {% if petition.signatures_left > 0 %}
+                                        <span class="text-danger">{{petition.signatures_left}}</span>
+                                    {% else %}
+                                        <span class="text-success">{{petition.signatures_left}}</span>
+                                    {% endif %}
+                                </td>
                                 {% if not petition.own and petition.signed %}
                                     <td><button type="button" class="btn btn-success unsignpetition">Signed</button></td>
                                 {% endif %}
@@ -31,7 +37,7 @@
                                     <td><button type="button" class="btn btn-info signpetition">Not Signed</button></td>
                                 {% endif %}
                                 {% if petition.own %}
-                                    <td>Cannot sign your own petition</td>
+                                    <td class="text-danger">Cannot sign your own petition</td>
                                 {% endif %}
                             </tr>
                         {% endfor %}

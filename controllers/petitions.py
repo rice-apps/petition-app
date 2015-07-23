@@ -9,10 +9,9 @@ import logging
 import pages
 import webapp2
 from datetime import date
-from  mail import sendConfirmation
+from mail import threshold_met, threshold_not_met
 
 from authentication import auth
-from models.user import User
 
 import models.petition
 import models.election
@@ -44,6 +43,10 @@ class PetitionsHandler(webapp2.RequestHandler):
                 petitions[election['title']][position] = models.petition.get_petitions_for_position(election_id,
                                                                                                     position)
                 for petition in petitions[election['title']][position]:
+                    petition['signatures_left'] = election['threshold'] - petition['signature_num']
+                    if petition['signatures_left'] < 0:
+                        petition['signatures_left'] = 0
+
                     if petition['user'].get_id() == user.get_id():
                         petition['own'] = True
                     else:
@@ -77,6 +80,9 @@ class MyPageHandler(webapp2.RequestHandler):
             petition['election'] = election.title
             organization = models.organization.get_organization(election.organization)
             petition['organization'] = organization.title
+            petition['signatures_left'] = election.threshold - petition['signature_num']
+            if petition['signatures_left'] < 0:
+                        petition['signatures_left'] = 0
             if election.end_date < date.today():
                 expired_petitions.append(petition)
             else:
@@ -127,16 +133,28 @@ class SignHandler(webapp2.RequestHandler):
 
         petition_id = self.request.get('id')
         petition = models.petition.get_petition(petition_id)
-        # sendConfirmation(petition.get_user().get_id(), petition.get_organization(), petition.get_election(),
-        # petition.get_position(), petition.email())
+
+        position = petition.get_position()
+
+        election_id = petition.get_election()
+        election = models.election.get_election(election_id)
+
+        organization_id = election.get_organization()
+        organization = models.organization.get_organization(organization_id)
+
+        petition_email = petition.get_user().get_id() + '@rice.edu'
+        admin_emails = []
+        for admin in organization.get_admins():
+            admin_emails.append(admin + '@rice.edu')
 
         # Ensures you cannot vote your own petition.
-        if user.get_id() != petition.get_user().get_id():
+        if user.get_id() == petition.get_user().get_id():
             models.petition.sign_petition(user, petition)
             self.response.out.write('Successfully signed!')
-            # if petition.get_votes() == 25:
-            # sendConfirmation(petition.get_user().get_id(), petition.get_organization(), petition.get_election(),
-            # petition.get_position(), petition.email())
+
+            if petition.get_signature_num() == election.get_threshold():
+                threshold_met(petition.get_user().get_id(), organization.get_title(), election.get_title(),
+                              str(election.get_threshold()), position, petition_email, admin_emails)
         else:
             self.response.out.write('You cannot sign your own petition!')
 
@@ -149,10 +167,28 @@ class UnsignHandler(webapp2.RequestHandler):
         petition_id = self.request.get('id')
         petition = models.petition.get_petition(petition_id)
 
+        position = petition.get_position()
+
+        election_id = petition.get_election()
+        election = models.election.get_election(election_id)
+
+        organization_id = election.get_organization()
+        organization = models.organization.get_organization(organization_id)
+
+        petition_email = petition.get_user().get_id() + '@rice.edu'
+        admin_emails = []
+        for admin in organization.get_admins():
+            admin_emails.append(admin + '@rice.edu')
+
         # Ensures you cannot unsign your own petition. You never voted in the first place.
-        if user.get_id() != petition.get_user().get_id():
+        if user.get_id() == petition.get_user().get_id():
             models.petition.unsign_petition(user, petition)
             self.response.out.write('Successfully unsigned!')
+
+            if petition.get_signature_num() == election.get_threshold() - 1:
+                threshold_not_met(petition.get_user().get_id(), organization.get_title(), election.get_title(),
+                                  str(election.get_threshold()), str(petition.get_signature_num()), position,
+                                  petition_email, admin_emails)
 
         else:
             self.response.out.write('You cannot unsign your own petition!')

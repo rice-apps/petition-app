@@ -2,15 +2,10 @@
     vertical-align: middle;
 }
 
-.container-narrow {
-    margin: 0 auto;
-    max-width: 400px;
-    margin-bottom: 40px;
-}
-
 #add-election-button {
     height: 100%;
-    float: right;
+    float: left;
+    margin-bottom: 10px;
 }
 
 #errorimage {
@@ -27,7 +22,7 @@
     display: block;
 }
 
-#ongoing-elections, #upcoming-elections, #ongoing-petitions, #expired-petitions {
+#ongoing-elections, #upcoming-elections, #ongoing-petitions, #expired-petitions, #admins, #expired-elections {
     padding: 10px;
     margin: 0 auto;
 }
@@ -36,3 +31,6 @@
     text-align: center;
 }
 
+.hiddenRow {
+    padding: 0 !important;
+}

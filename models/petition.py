@@ -6,7 +6,6 @@ __author__ = 'Xiaoyu Chen <xc12@rice.edu>'
 
 from google.appengine.ext import db
 from user import User
-from datetime import date, timedelta
 
 
 class Petition(db.Model):
@@ -42,9 +41,6 @@ class Petition(db.Model):
 
     def get_election(self):
         return self.election
-
-    def get_organization(self):
-        return self.organization
 
     def get_position(self):
         return self.position
