@@ -1,6 +1,8 @@
 import sys
 from socket import timeout
 from .version import __version__
+
+
 try:
     import urllib.request as urllib_request
     from urllib.parse import urlencode

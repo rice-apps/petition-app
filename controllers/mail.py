@@ -7,6 +7,7 @@ person has been approved by the petitions.
 from sendgrid import SendGridClient
 from sendgrid import Mail
 from netid2name import netid2name
+from config import *
 
 
 def threshold_met(petitioner_id, organization, election, threshold, position, petition_email, admin_emails):
@@ -26,8 +27,8 @@ def threshold_met(petitioner_id, organization, election, threshold, position, pe
         '<p>This petition has received the required number of signatures</p><ul><li><b>Petition Creator:</b> ' \
         + petitioner + '</li><li><b>Organization:</b> ' + organization + '</li><li><b>Election:</b> ' + election + \
         '</li><li><b>Position:</b> ' + position + '</li><li><b>Number of Signatures Required:</b> ' + threshold + \
-        '</li></ul><p>Please contact rsk8@rice.edu with any questions.</p></p><p style="text-align: left;"><b>' \
-        'Rice Apps Petitions</b></p>'
+        '</li></ul><p>Please contact ' + ADMIN_ID + '@rice.edu with any questions.</p></p><p style="text-align: ' \
+        'left;"><b>Rice Apps Petitions</b></p>'
 
     # Make a message Object
     message = Mail()
@@ -68,8 +69,8 @@ def threshold_not_met(petitioner_id, organization, election, threshold, signatur
         '<p>This petition no longer has the required number of signatures</p><ul><li><b>Petition Creator:</b> ' \
         + petitioner + '</li><li><b>Organization:</b> ' + organization + '</li><li><b>Election:</b> ' + election + \
         '</li><li><b>Position:</b> ' + position + '</li><li><b>Number of Signatures Required:</b> ' + threshold + \
-        '</li><li><b>Number of Signatures Obtained:</b> ' + signatures + '</li></ul><p>Please contact rsk8@rice.edu ' \
-        'with any questions.</p></p><p style="text-align: left;"><b>Rice Apps Petitions</b></p>'
+        '</li><li><b>Number of Signatures Obtained:</b> ' + signatures + '</li></ul><p>Please contact ' + ADMIN_ID + \
+        '@rice.edu with any questions.</p></p><p style="text-align: left;"><b>Rice Apps Petitions</b></p>'
 
     # Make a message Object
     message = Mail()

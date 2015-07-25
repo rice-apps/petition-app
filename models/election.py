@@ -2,8 +2,6 @@
 Model definition and functions for elections.
 """
 
-__author__ = 'Roshni Kaushik <rsk8@rice.edu>'
-
 from google.appengine.ext import db
 from user import User
 from datetime import date

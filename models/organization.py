@@ -2,8 +2,6 @@
 Model definition and functions for organizations.
 """
 
-__author__ = 'Roshni Kaushik <rsk8@rice.edu>'
-
 from google.appengine.ext import db
 from user import User
 

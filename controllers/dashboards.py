@@ -2,8 +2,6 @@
 Elections page controller.
 """
 
-__author__ = 'Roshni Kaushik <rsk8@rice.edu>'
-
 import json
 import logging
 import pages
@@ -13,15 +11,11 @@ import datetime
 # from  mail import sendConfirmation
 
 from authentication import auth
-
+from config import *
 import models.organization
 import models.user
 import models.election
 import models.petition
-
-PAGE_URI = '/dashboard'
-ADMIN_ID = 'rsk8'
-ERROR_URI = '/error'
 
 
 class DashboardHandler(webapp2.RequestHandler):
@@ -66,9 +60,10 @@ class DashboardHandler(webapp2.RequestHandler):
                 ongoing_elections.append(election)
         logging.info("Elections: %s", elections)
 
-        view = pages.render_view(PAGE_URI, {'organization': organization, 'ongoing_elections': ongoing_elections,
-                                            'upcoming_elections': upcoming_elections,
-                                            'expired_elections': expired_elections})
+        view = pages.render_view(DASHBOARD_URI, {'organization': organization,
+                                                     'ongoing_elections': ongoing_elections,
+                                                     'upcoming_elections': upcoming_elections,
+                                                     'expired_elections': expired_elections})
         pages.render_page(self, view)
 
 

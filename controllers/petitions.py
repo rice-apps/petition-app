@@ -12,14 +12,10 @@ from datetime import date
 from mail import threshold_met, threshold_not_met
 
 from authentication import auth
-
+from config import *
 import models.petition
 import models.election
 import models.organization
-
-PAGE_URI = '/petitions'
-MY_PAGE_URI = '/my'
-ERROR_URI = '/error'
 
 
 class PetitionsHandler(webapp2.RequestHandler):
@@ -57,7 +53,7 @@ class PetitionsHandler(webapp2.RequestHandler):
                         petition['signed'] = False
 
         logging.info("Petitions: %s", petitions)
-        view = pages.render_view(PAGE_URI, {'petitions': petitions, 'ongoing_elections': ongoing_elections})
+        view = pages.render_view(PETITIONS_URI, {'petitions': petitions, 'ongoing_elections': ongoing_elections})
         pages.render_page(self, view)
 
 
@@ -88,9 +84,9 @@ class MyPageHandler(webapp2.RequestHandler):
             else:
                 ongoing_petitions.append(petition)
 
-        view = pages.render_view(MY_PAGE_URI, {'expired_petitions': expired_petitions,
-                                               'ongoing_petitions': ongoing_petitions,
-                                               'ongoing_elections': ongoing_elections})
+        view = pages.render_view(MY_URI, {'expired_petitions': expired_petitions,
+                                          'ongoing_petitions': ongoing_petitions,
+                                          'ongoing_elections': ongoing_elections})
         pages.render_page(self, view)
 
     def post(self):

@@ -2,8 +2,6 @@
 Model definition and functions for petitions.
 """
 
-__author__ = 'Xiaoyu Chen <xc12@rice.edu>'
-
 from google.appengine.ext import db
 from user import User
 

@@ -2,8 +2,6 @@
 Model definition and functions for users.
 """
 
-__author__ = 'Xiaoyu Chen <xc12@rice.edu>'
-
 from google.appengine.ext import db
 
 

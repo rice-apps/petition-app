@@ -2,8 +2,6 @@
 Elections page controller.
 """
 
-__author__ = 'Roshni Kaushik <rsk8@rice.edu>'
-
 import json
 import logging
 import pages
@@ -14,10 +12,7 @@ import models.organization
 import models.user
 import models.election
 import models.petition
-
-PAGE_URI = '/organizations'
-ADMIN_ID = 'rsk8'
-ERROR_URI = '/error'
+from config import *
 
 
 class OrganizationsHandler(webapp2.RequestHandler):
@@ -42,7 +37,8 @@ class OrganizationsHandler(webapp2.RequestHandler):
         else:
             admins = ADMIN_ID + ',' + user.get_id()
 
-        view = pages.render_view(PAGE_URI, {'organizations': organizations, 'is_admin': is_admin, 'admins': admins})
+        view = pages.render_view(ORGANIZATION_URI, {'organizations': organizations, 'is_admin': is_admin,
+                                                    'admins': admins, 'admin': ADMIN_ID})
         pages.render_page(self, view)
 
     def post(self):

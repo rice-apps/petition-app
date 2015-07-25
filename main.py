@@ -16,6 +16,7 @@
 #
 import webapp2
 from controllers import main, petitions, organizations, dashboards
+from config import *
 
 app = webapp2.WSGIApplication([
     ('/petitions', petitions.PetitionsHandler),
@@ -30,4 +31,4 @@ app = webapp2.WSGIApplication([
     ('/error', main.ErrorHandler),
     ('/', main.MainHandler)
 
-], debug=True)
+], debug=DEBUG)
