@@ -4,8 +4,10 @@ An open source online platform that allows:
 * Rice Students to create petitions to be on the ballot for those elections
 * Other Rice Students to sign those petitions
 * Email notification to the petitioner and the organization administrators when the required number of signatures have been met
+
 ### Requirements
-##### You must have Rice credentials to login to the application
+You must have Rice credentials to login to the application
+
 ### Running the application
 * Install Python Version 2.7 or higher (https://www.python.org/downloads/)
 * Install Google App Engine for Python (https://cloud.google.com/appengine/downloads)
@@ -28,14 +30,17 @@ An open source online platform that allows:
     + Type the following command: `dev_appserver.py petition-app`
     + The project will be running at http://localhost:8080
     + To stop running the application, just enter `[Ctrl] + c`
+
 ### Server Logs and Database
 * To view the server logs
     + In Windows, just click the Logs button in Google App Engine
     + In Mac/Linux, the logs will just appear in the command prompt window
 * To view the local database, navigate to http://localhost:8000/datastore in the browser
+
 ### Configuration
 * To run as an administrator, just change the `ADMIN_ID` to your net-id in the config.py file
 * To change debugging options, change the `DEBUG` variable to either `True` or `False`
+
 ### Questions? Suggestions?
 * Just email rsk8@rice.edu
 
