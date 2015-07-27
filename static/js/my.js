@@ -1,6 +1,4 @@
-(function() {
-    $('.positions').hide();
-
+$(function() {
     $('#input-election').on('change', function(){
         var election_id = $('#input-election').val();
         return $.ajax({

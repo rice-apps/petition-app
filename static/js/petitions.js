@@ -1,4 +1,4 @@
-(function() {
+$(function() {
 
     $(document).on('click', 'button[class="btn btn-info signpetition"]', function(){
         var petition_id, tr;
