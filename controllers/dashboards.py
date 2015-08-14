@@ -61,9 +61,9 @@ class DashboardHandler(webapp2.RequestHandler):
         logging.info("Elections: %s", elections)
 
         view = pages.render_view(DASHBOARD_URI, {'organization': organization,
-                                                     'ongoing_elections': ongoing_elections,
-                                                     'upcoming_elections': upcoming_elections,
-                                                     'expired_elections': expired_elections})
+                                                 'ongoing_elections': ongoing_elections,
+                                                 'upcoming_elections': upcoming_elections,
+                                                 'expired_elections': expired_elections})
         pages.render_page(self, view)
 
 

@@ -16,32 +16,32 @@
                 <div role="tabpanel" class="tab-pane active" id="ongoing-petitions-tab">
                     <table id="ongoing-petitions-table" class="table" data-toggle="table" data-sort-name="organization" data-sort-order="asc">
                         <thead>
-                            <tr>
-                                <th data-field="organization" data-sortable="true">Organization</th>
-                                <th data-field="election" data-sortable="true">Election</th>
-                                <th data-field="position" data-sortable="true">Position</th>
-                                <th data-field="message" data-sortable="false">Message</th>
-                                <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
-                                <th data-field="delete" data-sortable="false">Delete</th>
-                            </tr>
+                        <tr>
+                            <th data-field="organization" data-sortable="true">Organization</th>
+                            <th data-field="election" data-sortable="true">Election</th>
+                            <th data-field="position" data-sortable="true">Position</th>
+                            <th data-field="message" data-sortable="false">Message</th>
+                            <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
+                            <th data-field="delete" data-sortable="false">Delete</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {% for petition in ongoing_petitions %}
-                                <tr data-id="{{petition.id}}">
-                                    <td id="organization">{{petition.organization}}</td>
-                                    <td id="election">{{petition.election}}</td>
-                                    <td id="position">{{petition.position}}</td>
-                                    <td id="message">{{petition.message}}</td>
-                                    <td>
-                                        {% if petition.signatures_left > 0 %}
-                                            <span class="text-danger">{{petition.signatures_left}}</span>
-                                        {% else %}
-                                            <span class="text-success">{{petition.signatures_left}}</span>
-                                        {% endif %}
-                                    </td>
-                                    <td><button type="button" class="btn btn-danger deletepetition">Delete</button></td>
-                                </tr>
-                            {% endfor %}
+                        {% for petition in ongoing_petitions %}
+                        <tr data-id="{{petition.id}}">
+                            <td id="organization">{{petition.organization}}</td>
+                            <td id="election">{{petition.election}}</td>
+                            <td id="position">{{petition.position}}</td>
+                            <td id="message">{{petition.message}}</td>
+                            <td>
+                                {% if petition.signatures_left > 0 %}
+                                <span class="text-danger">{{petition.signatures_left}}</span>
+                                {% else %}
+                                <span class="text-success">{{petition.signatures_left}}</span>
+                                {% endif %}
+                            </td>
+                            <td><button type="button" class="btn btn-danger deletepetition">Delete</button></td>
+                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -49,30 +49,30 @@
                     <h6 class="text-danger">Note: You cannot delete expired petitions. They are shown here for your record</h6>
                     <table id="expired-petitions-table" class="table" data-toggle="table" data-sort-name="organization" data-sort-order="asc">
                         <thead>
-                            <tr>
-                                <th data-field="organization" data-sortable="true">Organization</th>
-                                <th data-field="election" data-sortable="true">Election</th>
-                                <th data-field="position" data-sortable="true">Position</th>
-                                <th data-field="message" data-sortable="false">Message</th>
-                                <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
-                            </tr>
+                        <tr>
+                            <th data-field="organization" data-sortable="true">Organization</th>
+                            <th data-field="election" data-sortable="true">Election</th>
+                            <th data-field="position" data-sortable="true">Position</th>
+                            <th data-field="message" data-sortable="false">Message</th>
+                            <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {% for petition in expired_petitions %}
-                                <tr data-id="{{petition.id}}">
-                                    <td id="organization">{{petition.organization}}</td>
-                                    <td id="election">{{petition.election}}</td>
-                                    <td id="position">{{petition.position}}</td>
-                                    <td id="message">{{petition.message}}</td>
-                                    <td>
-                                        {% if petition.signatures_left > 0 %}
-                                            <span class="text-danger">{{petition.signatures_left}}</span>
-                                        {% else %}
-                                            <span class="text-success">{{petition.signatures_left}}</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
+                        {% for petition in expired_petitions %}
+                        <tr data-id="{{petition.id}}">
+                            <td id="organization">{{petition.organization}}</td>
+                            <td id="election">{{petition.election}}</td>
+                            <td id="position">{{petition.position}}</td>
+                            <td id="message">{{petition.message}}</td>
+                            <td>
+                                {% if petition.signatures_left > 0 %}
+                                <span class="text-danger">{{petition.signatures_left}}</span>
+                                {% else %}
+                                <span class="text-success">{{petition.signatures_left}}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -104,7 +104,7 @@
                                 <select id="input-election" class="form-control">
                                     <option value="Select an Election" disabled selected>--Select an Election--</option>
                                     {% for election in ongoing_elections %}
-                                        <option value="{{election.id}}">{{election.title}} by {{election.organization}}</option>
+                                    <option value="{{election.id}}">{{election.title}} by {{election.organization}}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -132,8 +132,8 @@
 
     <!-- modal toggle -->
     <script type="text/javascript">
-		$('#newPetition').modal('show');
-		$('#newPetition').modal('hide');
+        $('#newPetition').modal('show');
+        $('#newPetition').modal('hide');
     </script>
 
 </div>

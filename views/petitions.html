@@ -3,46 +3,46 @@
         <table id="petitions-table" class="table" data-toggle="table" data-pagination="true"
                data-search="true" data-sort-name="organization" data-sort-order="asc">
             <thead>
-                <tr>
-                    <th data-field="organization" data-sortable="true">Organization</th>
-                    <th data-field="election" data-sortable="true">Election</th>
-                    <th data-field="position" data-sortable="true">Position</th>
-                    <th data-field="name" data-sortable="true">Petition Creator</th>
-                    <th data-field="message" data-sortable="false">Message</th>
-                    <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
-                    <th data-field="sign" data-sortable="false">Signed</th>
-                </tr>
+            <tr>
+                <th data-field="organization" data-sortable="true">Organization</th>
+                <th data-field="election" data-sortable="true">Election</th>
+                <th data-field="position" data-sortable="true">Position</th>
+                <th data-field="name" data-sortable="true">Petition Creator</th>
+                <th data-field="message" data-sortable="false">Message</th>
+                <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
+                <th data-field="sign" data-sortable="false">Signed</th>
+            </tr>
             </thead>
             <tbody>
-                {% for election in ongoing_elections %}
-                    {% for position, position_petitions in petitions[election.title].items() %}
-                        {% for petition in position_petitions %}
-                            <tr data-id="{{petition.id}}">
-                                <td>{{election.organization}}</td>
-                                <td>{{election.title}}</td>
-                                <td>{{position}}</td>
-                                <td>{{petition.name}}</td>
-                                <td>{{petition.message}}</td>
-                                <td>
-                                    {% if petition.signatures_left > 0 %}
-                                        <span class="text-danger">{{petition.signatures_left}}</span>
-                                    {% else %}
-                                        <span class="text-success">{{petition.signatures_left}}</span>
-                                    {% endif %}
-                                </td>
-                                {% if not petition.own and petition.signed %}
-                                    <td><button type="button" class="btn btn-success unsignpetition">Signed</button></td>
-                                {% endif %}
-                                {% if not petition.own and not petition.signed %}
-                                    <td><button type="button" class="btn btn-info signpetition">Not Signed</button></td>
-                                {% endif %}
-                                {% if petition.own %}
-                                    <td class="text-danger">Cannot sign your own petition</td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    {% endfor %}
-                {% endfor %}
+            {% for election in ongoing_elections %}
+            {% for position, position_petitions in petitions[election.title].items() %}
+            {% for petition in position_petitions %}
+            <tr data-id="{{petition.id}}">
+                <td>{{election.organization}}</td>
+                <td>{{election.title}}</td>
+                <td>{{position}}</td>
+                <td>{{petition.name}}</td>
+                <td>{{petition.message}}</td>
+                <td>
+                    {% if petition.signatures_left > 0 %}
+                    <span class="text-danger">{{petition.signatures_left}}</span>
+                    {% else %}
+                    <span class="text-success">{{petition.signatures_left}}</span>
+                    {% endif %}
+                </td>
+                {% if not petition.own and petition.signed %}
+                <td><button type="button" class="btn btn-success unsignpetition">Signed</button></td>
+                {% endif %}
+                {% if not petition.own and not petition.signed %}
+                <td><button type="button" class="btn btn-info signpetition">Not Signed</button></td>
+                {% endif %}
+                {% if petition.own %}
+                <td class="text-danger">Cannot sign your own petition</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            {% endfor %}
             </tbody>
         </table>
     </div>
