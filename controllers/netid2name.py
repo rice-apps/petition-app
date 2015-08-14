@@ -12,10 +12,6 @@ def netid2name(netid):
     # Do something useful with it
     if apiResponse["result"] == "success":
         students = apiResponse["people"]["students"]
-        return students[0]["name"]
+        return students[0]['name']
     else:
         print "An error was encountered:", apiResponse["message"]
-
-
-
-

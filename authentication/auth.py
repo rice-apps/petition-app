@@ -12,7 +12,7 @@ import webapp2
 from gaesessions import get_current_session
 from config import *
 
-CAS_SERVER = "https://netid.rice.edu"
+CAS_SERVER = 'https://netid.rice.edu'
 
 
 class LoginResponseHandler(webapp2.RequestHandler):
@@ -81,16 +81,16 @@ class LoginResponseHandler(webapp2.RequestHandler):
         Returns:
             The trimmed text between tags. "" if tag is not found.
         """
-        tag1_pos1 = string.find("<" + tag)
+        tag1_pos1 = string.find('<' + tag)
         #  No tag found, return empty string.
         if tag1_pos1 == -1:
-            return ""
-        tag1_pos2 = string.find(">", tag1_pos1)
+            return ''
+        tag1_pos2 = string.find('>', tag1_pos1)
         if tag1_pos2 == -1:
-            return ""
-        tag2_pos1 = string.find("</" + tag, tag1_pos2)
+            return ''
+        tag2_pos1 = string.find('</' + tag, tag1_pos2)
         if tag2_pos1 == -1:
-            return ""
+            return ''
         return string[tag1_pos2+1:tag2_pos1].strip()
 
     @staticmethod
