@@ -2,15 +2,14 @@
 Model definition and functions for users.
 """
 
-__author__ = 'Xiaoyu Chen <xc12@rice.edu>'
-
 from google.appengine.ext import db
+
 
 class User(db.Model):
     net_id = db.StringProperty(required=True)
-
+    
     def get_id(self):
-    	return self.net_id
+        return self.net_id
 
 
 def get_user(net_id, create=False):

@@ -2,14 +2,18 @@
 Main page controller.
 """
 
-__author__ = 'Xiaoyu Chen <xc12@rice.edu>'
-
 import pages
 import webapp2
+from config import *
 
-PAGE_URI = '/main'
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        view = pages.render_view(PAGE_URI)
+        view = pages.render_view(MAIN_URI)
+        pages.render_page(self, view)
+
+
+class ErrorHandler(webapp2.RequestHandler):
+    def get(self):
+        view = pages.render_view(ERROR_URI)
         pages.render_page(self, view)

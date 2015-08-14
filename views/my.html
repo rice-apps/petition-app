@@ -1,29 +1,140 @@
-<div class="container-narrow">
-  <div id="petitions">
-	{% if myPetitions|length == 0 %}
-		<div class="alert">
-		<h2>You have no petitions!</h2>
-		</div>
-	{% endif %}
-	
-    {% for petition in myPetitions %}
-      <div class="alert" data-id="{{ petition.id }}">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4>{{ petition.title }}</h4>
-        <h6>{{ petition.votes}}</h6>
-        <p>{{ petition.note }}</p>
-      </div>
-    {% endfor %}
-  </div>
-
-  <a class="btn btn-large btn-success" href="/petitions">Back</a>
-
-  <div class='wow'>
-    <div class="jumbotron">
-      <h1>Leaving?</h1>
-      <div class="lead">Come back soon!</div>
-      <a class="btn btn-large btn-success" href="/authenticate/logout?destination=home">Sign Out</a>
+<div class="container">
+    <div class="row">
+        <div class="span2">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPetition">
+                New Petition
+            </button>
+        </div>
+        <div class="span10" id="petitions">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#ongoing-petitions-tab" aria-controls="ongoing-petitions"
+                                                          role="tab" data-toggle="tab">Ongoing Petitions</a></li>
+                <li role="presentation"><a href="#expired-petitions-tab" aria-controls="expired-petitions"
+                                           role="tab" data-toggle="tab">Expired Petitions</a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="ongoing-petitions-tab">
+                    <table id="ongoing-petitions-table" class="table" data-toggle="table" data-sort-name="organization" data-sort-order="asc">
+                        <thead>
+                        <tr>
+                            <th data-field="organization" data-sortable="true">Organization</th>
+                            <th data-field="election" data-sortable="true">Election</th>
+                            <th data-field="position" data-sortable="true">Position</th>
+                            <th data-field="message" data-sortable="false">Message</th>
+                            <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
+                            <th data-field="delete" data-sortable="false">Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for petition in ongoing_petitions %}
+                        <tr data-id="{{petition.id}}">
+                            <td id="organization">{{petition.organization}}</td>
+                            <td id="election">{{petition.election}}</td>
+                            <td id="position">{{petition.position}}</td>
+                            <td id="message">{{petition.message}}</td>
+                            <td>
+                                {% if petition.signatures_left > 0 %}
+                                <span class="text-danger">{{petition.signatures_left}}</span>
+                                {% else %}
+                                <span class="text-success">{{petition.signatures_left}}</span>
+                                {% endif %}
+                            </td>
+                            <td><button type="button" class="btn btn-danger deletepetition">Delete</button></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="expired-petitions-tab">
+                    <h6 class="text-danger">Note: You cannot delete expired petitions. They are shown here for your record</h6>
+                    <table id="expired-petitions-table" class="table" data-toggle="table" data-sort-name="organization" data-sort-order="asc">
+                        <thead>
+                        <tr>
+                            <th data-field="organization" data-sortable="true">Organization</th>
+                            <th data-field="election" data-sortable="true">Election</th>
+                            <th data-field="position" data-sortable="true">Position</th>
+                            <th data-field="message" data-sortable="false">Message</th>
+                            <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for petition in expired_petitions %}
+                        <tr data-id="{{petition.id}}">
+                            <td id="organization">{{petition.organization}}</td>
+                            <td id="election">{{petition.election}}</td>
+                            <td id="position">{{petition.position}}</td>
+                            <td id="message">{{petition.message}}</td>
+                            <td>
+                                {% if petition.signatures_left > 0 %}
+                                <span class="text-danger">{{petition.signatures_left}}</span>
+                                {% else %}
+                                <span class="text-success">{{petition.signatures_left}}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="newPetition" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="newLabel">New Petition</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="input-name" class="control-label col-sm-2">Your Name:</label>
+                            <div class="col-sm-10">
+                                <input id="input-name" placeholder="Bob Smith" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-election" class="control-label col-sm-2">Election:</label>
+                            <div class="col-sm-10">
+                                <select id="input-election" class="form-control">
+                                    <option value="Select an Election" disabled selected>--Select an Election--</option>
+                                    {% for election in ongoing_elections %}
+                                    <option value="{{election.id}}">{{election.title}} by {{election.organization}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-position" class="control-label col-sm-2">Position:</label>
+                            <div class="col-sm-10">
+                                <select id="input-position" class="form-control" name="input-position">
+                                    <option value="Select a Position" disabled selected>--Select a Position--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-message" class="control-label col-sm-2">Message:</label>
+                            <div class="col-sm-10">
+                                <textarea id="input-message" rows="3" placeholder="Message to your supporters!" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <button id="add-petition-button" class="btn btn-primary" data-dismiss="modal">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal toggle -->
+    <script type="text/javascript">
+        $('#newPetition').modal('show');
+        $('#newPetition').modal('hide');
+    </script>
+
 </div>
 <script src="/static/js/my.js"></script>

@@ -1,44 +1,51 @@
 <div class="container">
-  <div class="row">
-		
-		<div class="span2">
-		  <a class="btn btn-large btn-success" href="/my">My Page</a>
-		  <h2><strong>Leaving?</strong></h2>
-		  <p>Come back soon</p>
-		  <a class="btn btn-large btn-success" href="/authenticate/logout?destination=home">Sign Out</a>
-		</div>
-	  
-	  <div class="span6" id="petitions">
-		{% for petition in effectivePetitions %}
-		  <div class="alert" data-id="{{ petition.id }}">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<h4>{{ petition.title }}</h4>
-			<h6>Vote #: {{ petition.votes}}</h6>
-			<p>{{ petition.note }}</p>
-			<p>{{petition.user}}</p>
-			<button type="button" id="vote-button" class="btn btn-mini">Vote</button>
-			<button type="button" id="unvote-button" class="btn btn-mini">Unvote</button>
-		  </div>
-		{% endfor %}
-	  </div>
-	  
-	  <div class="span4">
-		  <form class="form-horizontal well container-narrow">
-			<fieldset>
-			  <legend>Add Petition</legend>
-				<label>Name</label>
-				<input id="input-title" type="text" placeholder="i.e. Burt McMurtry" class="span3">
-				<label>Organizer Name</label>
-				<input id="org-name" type="text" placeholder="Organizer's Name" class="span3">
-				<label>Organizer Email</label>
-				<input id="org-email" type="text" placeholder="Organizer's Email Address" class="span3">
-				<label>Petition Comments</label>
-				<textarea id="input-text" class="span3 petition" rows="5" placeholder="Send a message to your supporters!"></textarea>
-			  <button id="add-button" class="btn btn-primary">Add</button>
-			</fieldset>
-		  </form>
-		 </div>
-  </div>
-
+    <div class="row">
+        <table id="petitions-table" class="table" data-toggle="table" data-pagination="true"
+               data-search="true" data-sort-name="organization" data-sort-order="asc">
+            <thead>
+            <tr>
+                <th data-field="organization" data-sortable="true">Organization</th>
+                <th data-field="election" data-sortable="true">Election</th>
+                <th data-field="position" data-sortable="true">Position</th>
+                <th data-field="name" data-sortable="true">Petition Creator</th>
+                <th data-field="message" data-sortable="false">Message</th>
+                <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
+                <th data-field="sign" data-sortable="false">Signed</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for election in ongoing_elections %}
+            {% for position, position_petitions in petitions[election.title].items() %}
+            {% for petition in position_petitions %}
+            <tr data-id="{{petition.id}}">
+                <td>{{election.organization}}</td>
+                <td>{{election.title}}</td>
+                <td>{{position}}</td>
+                <td>{{petition.name}}</td>
+                <td>{{petition.message}}</td>
+                <td>
+                    {% if petition.signatures_left > 0 %}
+                    <span class="text-danger">{{petition.signatures_left}}</span>
+                    {% else %}
+                    <span class="text-success">{{petition.signatures_left}}</span>
+                    {% endif %}
+                </td>
+                {% if not petition.own and petition.signed %}
+                <td><button type="button" class="btn btn-success unsignpetition">Signed</button></td>
+                {% endif %}
+                {% if not petition.own and not petition.signed %}
+                <td><button type="button" class="btn btn-info signpetition">Not Signed</button></td>
+                {% endif %}
+                {% if petition.own %}
+                <td class="text-danger">Cannot sign your own petition</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div> <!-- /container -->
+
 <script src="/static/js/petitions.js"></script>

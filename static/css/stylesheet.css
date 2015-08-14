@@ -1,19 +1,36 @@
-
-
-.container-narrow {
-    margin: 0 auto;
-    max-width: 312px;
-    margin-bottom: 40px;
+.body {
+    vertical-align: middle;
 }
 
-.wow {
+#add-election-button {
+    height: 100%;
+    float: left;
+    margin-bottom: 10px;
+}
+
+#errorimage {
+    height: auto;
+    width: auto;
+    max-width: 300px;
+    max-height: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.modal{
+    display: block;
+}
+
+#ongoing-elections, #upcoming-elections, #ongoing-petitions, #expired-petitions, #admins, #expired-elections {
+    padding: 10px;
+    margin: 0 auto;
+}
+
+.jumbotron {
     text-align: center;
 }
 
-.sticky {
-}
-
-#add-button {
-    margin-top: 10px;
-    float: right;
+.hiddenRow {
+    padding: 0 !important;
 }

@@ -1,4 +1,6 @@
 """A fast, lightweight, and secure session WSGI middleware for use with GAE."""
+
+
 from Cookie import CookieError, SimpleCookie
 from base64 import b64decode, b64encode
 import datetime
@@ -27,7 +29,9 @@ EXPIRE_COOKIE_FMT = ' %s=; expires=Wed, 01-Jan-1970 00:00:00 GMT; Path=' + COOKI
 COOKIE_FMT = ' ' + COOKIE_NAME_PREFIX + '%02d="%s"; %sPath=' + COOKIE_PATH + '; HttpOnly'
 COOKIE_FMT_SECURE = COOKIE_FMT + '; Secure'
 COOKIE_DATE_FMT = '%a, %d-%b-%Y %H:%M:%S GMT'
-COOKIE_OVERHEAD = len(COOKIE_FMT % (0, '', '')) + len('expires=Xxx, xx XXX XXXX XX:XX:XX GMT; ') + 150  # 150=safety margin (e.g., in case browser uses 4000 instead of 4096)
+COOKIE_OVERHEAD = len(COOKIE_FMT % (0, '', '')) + len('expires=Xxx, xx XXX XXXX XX:XX:XX GMT; ') + 150
+# 150=safety margin (e.g., in case browser uses 4000 instead of 4096)
+
 MAX_DATA_PER_COOKIE = MAX_COOKIE_LEN - COOKIE_OVERHEAD
 
 _tls = threading.local()
@@ -181,7 +185,7 @@ class Session(object):
         # make a random ID (random.randrange() is 10x faster but less secure?)
         if expire_ts is None:
             expire_dt = datetime.datetime.now() + self.lifetime
-            expire_ts = int(time.mktime((expire_dt).timetuple()))
+            expire_ts = int(time.mktime(expire_dt.timetuple()))
         else:
             expire_ts = int(expire_ts)
         if ssl_only:
@@ -446,7 +450,8 @@ class SessionMiddleware(object):
     memcache/datastore latency which is critical for small sessions.  Larger
     sessions are kept in memcache+datastore instead.  Defaults to 10KB.
     """
-    def __init__(self, app, cookie_key, lifetime=DEFAULT_LIFETIME, no_datastore=False, cookie_only_threshold=DEFAULT_COOKIE_ONLY_THRESH):
+    def __init__(self, app, cookie_key, lifetime=DEFAULT_LIFETIME, no_datastore=False,
+                 cookie_only_threshold=DEFAULT_COOKIE_ONLY_THRESH):
         self.app = app
         self.lifetime = lifetime
         self.no_datastore = no_datastore
@@ -455,11 +460,13 @@ class SessionMiddleware(object):
         if not self.cookie_key:
             raise ValueError("cookie_key MUST be specified")
         if len(self.cookie_key) < 32:
-            raise ValueError("RFC2104 recommends you use at least a 32 character key.  Try os.urandom(64) to make a key.")
+            raise ValueError("RFC2104 recommends you use at least a 32 character key.  "
+                             "Try os.urandom(64) to make a key.")
 
     def __call__(self, environ, start_response):
         # initialize a session for the current user
-        _tls.current_session = Session(lifetime=self.lifetime, no_datastore=self.no_datastore, cookie_only_threshold=self.cookie_only_thresh, cookie_key=self.cookie_key)
+        _tls.current_session = Session(lifetime=self.lifetime, no_datastore=self.no_datastore,
+                                       cookie_only_threshold=self.cookie_only_thresh, cookie_key=self.cookie_key)
 
         # create a hook for us to insert a cookie into the response headers
         def my_start_response(status, headers, exc_info=None):
