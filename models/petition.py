@@ -2,62 +2,62 @@
 Model definition and functions for petitions.
 """
 
-__author__ = 'Xiaoyu Chen <xc12@rice.edu>'
-
 from google.appengine.ext import db
 from user import User
-from datetime import date, timedelta
+
 
 class Petition(db.Model):
+    
     user = db.ReferenceProperty(User, required=True)
-    date_added = db.DateProperty(auto_now=True)
-    title = db.StringProperty(required=True)
-    note = db.TextProperty()
-    organizer_email = db.StringProperty(required=True)
-    organizer_name = db.StringProperty(required=True)
-    votes = db.IntegerProperty(default = 0)
-    voters = db.ListProperty(str)
-
+    name = db.StringProperty(required=True)
+    message = db.TextProperty()
+    election = db.StringProperty(required=True)
+    position = db.StringProperty(required=True)
+    signature_num = db.IntegerProperty(default=0)
+    signatures = db.ListProperty(str)
+    
     def to_json(self):
         return {
             'user': self.user,
+            'name': self.name,
             'id': str(self.key()),
-            'title': self.title,
-            'note': self.note,
-            'votes': self.votes,
-            'organizer_email': self.organizer_email,
-            'organizer_name': self.organizer_name
-        }
-    def get_votes(self):
-        return self.votes
+            'message': self.message,
+            'election': self.election,
+            'position': self.position,
+            'signature_num': self.signature_num,
+            'signatures': self.signatures
+            }
 
-    def get_voters(self):
-        return self.votes
+    def get_signature_num(self):
+        return self.signature_num
+
+    def get_signatures(self):
+        return self.signatures
 
     def get_user(self):
         return self.user
 
-    def get_org_email(self):
-        return self.organizer_email
+    def get_election(self):
+        return self.election
 
-    def get_org_name(self):
-        return self.organizer_name
-
-    def add_voter(self,voter):
-        net_id = voter.get_id()
-        if net_id not in self.voters:
-            self.voters.append(net_id)
-            self.votes = self.votes + 1
+    def get_position(self):
+        return self.position
+    
+    def add_signature(self, signee):
+        net_id = signee.get_id()
+        if net_id not in self.signatures:
+            self.signatures.append(net_id)
+            self.signature_num += 1
             self.put()
             return True
         else:
             return False
-
-    def unvote(self, voter):
-        net_id = voter.get_id()
-        if net_id in self.voters:
-            self.voters.remove(net_id)
-            self.votes = self.votes - 1
+          
+    def remove_signature(self, signee):
+        net_id = signee.get_id()
+        if net_id in self.signatures:
+            self.signatures.remove(net_id)
+            self.signature_num -= 1
             self.put()
             return True
         else:
@@ -65,51 +65,54 @@ class Petition(db.Model):
 
 
 def create_petition(user, petition):
-    #existing = Petition.gql('WHERE title = :1', petition['title']).get()
     existing = get_petitions(user)
     name_list = []
-    for petition in existing:
-        name_list.append(petition['title'])
-    if not existing or petition['title'] not in name_list:
+
+    for existing_petition in existing:
+        name_list.append((existing_petition['election'], existing_petition['position']))
+
+    petition_tuple = (petition['election'], petition['position'])
+    if petition_tuple not in name_list or not existing:
         petition = Petition(
-            user=user.key(),
-            title=petition['title'],
-            note=petition['note'],
-            organizer_email=petition['org-email'],
-            organizer_name=petition['org-name'])
+            user=user,
+            name=petition['name'],
+            message=petition['message'],
+            election=petition['election'],
+            position=petition['position'],
+            signature_num=0,
+            signatures=[])
         petition.put()
         return petition
     else:
-        return existing
+        return None
 
-def vote_petition(voter, petition):
-    return petition.add_voter(voter)
 
-def unvote_petition(unvoter, petition):
-    return petition.unvote(unvoter)
+def sign_petition(signee, petition):
+    return petition.add_signature(signee)
+
+
+def unsign_petition(unsignee, petition):
+    return petition.remove_signature(unsignee)
+
 
 def get_petition(key):
     return Petition.get(key)
 
 
-def get_in_effect_petitions():
+def get_petitions_for_position(election_id, position):
     result = []
-    query = Petition.gql('WHERE date_added >= :1', date.today() - timedelta(14))
+    query = Petition.gql('WHERE election = :1', election_id)
     for petition in query:
-        result.append(petition.to_json())
+        if position == petition.position:
+            result.append(petition.to_json())
     return result
 
-def get_expired_petitions():
-    result = []
-    query = Petition.gql('WHERE date_added < :1', date.today() - timedelta(14))
-    for petition in query:
-        result.append(petition.to_json())
-    return result
 
 def delete_petition(petition):
-    # Refactored into this method incase there are other things to be done
+    # Refactored into this method in case there are other things to be done
     # before deleting a petition
     petition.delete()
+
 
 def get_petitions(user):
     result = []

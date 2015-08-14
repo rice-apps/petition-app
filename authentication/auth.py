@@ -2,8 +2,6 @@
 Application specific authentication module.
 """
 
-__author__ = 'Waseem Ahmad <waseem@rice.edu>'
-
 
 import logging
 import models.user
@@ -12,8 +10,9 @@ import urllib
 import webapp2
 
 from gaesessions import get_current_session
+from config import *
 
-CAS_SERVER  = "https://netid.rice.edu"
+CAS_SERVER = 'https://netid.rice.edu'
 
 
 class LoginResponseHandler(webapp2.RequestHandler):
@@ -44,8 +43,7 @@ class LoginResponseHandler(webapp2.RequestHandler):
 
         destination_url = str(self.request.get('destination'))
         if not destination_url:
-            self.response.out.write('User authenticated. However, no destination '
-                              'url is provided.')
+            self.response.out.write('User authenticated. However, no destination url is provided.')
             return
 
         logging.info('Redirecting to %s', destination_url)
@@ -83,13 +81,16 @@ class LoginResponseHandler(webapp2.RequestHandler):
         Returns:
             The trimmed text between tags. "" if tag is not found.
         """
-        tag1_pos1 = string.find("<" + tag)
+        tag1_pos1 = string.find('<' + tag)
         #  No tag found, return empty string.
-        if tag1_pos1==-1: return ""
-        tag1_pos2 = string.find(">",tag1_pos1)
-        if tag1_pos2==-1: return ""
-        tag2_pos1 = string.find("</" + tag,tag1_pos2)
-        if tag2_pos1==-1: return ""
+        if tag1_pos1 == -1:
+            return ''
+        tag1_pos2 = string.find('>', tag1_pos1)
+        if tag1_pos2 == -1:
+            return ''
+        tag2_pos1 = string.find('</' + tag, tag1_pos2)
+        if tag2_pos1 == -1:
+            return ''
         return string[tag1_pos2+1:tag2_pos1].strip()
 
     @staticmethod
@@ -110,7 +111,7 @@ class LogoutHandler(webapp2.RequestHandler):
     def get(self):
         """Logs out the user from CAS."""
         session = get_current_session()
-        if session.has_key('net_id'):
+        if 'net_id' in session:
             session.terminate()
         else:
             self.response.out.write('You weren\'t logged in.')
@@ -128,7 +129,8 @@ class LogoutHandler(webapp2.RequestHandler):
 class LogoutResponseHandler(webapp2.RequestHandler):
     def get(self):
         """Logs out the user."""
-        self.response.out.write('You\'ve been logged out. See you again soon!')   
+        self.response.out.write('You\'ve been logged out. See you again soon!')
+        self.redirect('/')
 
 
 def redirect_to_login(request_handler):
@@ -153,7 +155,7 @@ def get_logged_in_user():
         user: the user if logged in, None otherwise.
     """
     session = get_current_session()
-    if session.has_key('net_id'):
+    if 'net_id' in session:
         return models.user.get_user(session['net_id'])
     return None
 
@@ -178,5 +180,4 @@ app = webapp2.WSGIApplication([
     ('/authenticate/login-response', LoginResponseHandler),
     ('/authenticate/logout', LogoutHandler),
     ('/authenticate/logout-response', LogoutResponseHandler)
-], debug=True)
-
+], debug=DEBUG)

@@ -38,9 +38,3 @@ def render_page(handler, content):
     """
     page = JINJA_ENV.get_template('templates/page.html')
     handler.response.out.write(page.render({'content': content}))
-
-
-
-
-
-    

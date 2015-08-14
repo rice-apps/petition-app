@@ -1,126 +1,51 @@
-
-<div class="navbar navbar-inverse navbar-fixed-top" role='navigation'>
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
- 
-      <a class="brand" href="/main.html"><img id ="logo" src="/static/img/upvote-logo-white.png" alt="Home" height="20px" width="60px"></a> 
-<!--  TODO: get nav bar w/ search looking nice and working on the backend too
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
--->
-    </div>
-  </div>
-</div>
-
 <div class="container">
-  <div class="row">
-		
-		<div class="span4" id="intro-box">
-            <center>
-          <!--h2>INSTRUCTIONS</h2>-->
-          <img class = "header" src="/static/img/instructions-banner.png"> 
-          <p>To the right, you'll find a number of "petitions". You'll be able to upvote the ones you like! Some of them will be petitions for candidacy. Others might be for a particular campus-wide cause. Feel free to create your own!</p>
-		  <!-- <a class="btn btn-large btn-success" href="/my">MY PAGE</a> --> 
-		  <a class="btn" href="/authenticate/logout?destination=home">SIGN OUT</a>   
-		  <!-- Button trigger modal -->
-		  <br><br>
-		  <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#newPetition">
-		    + NEW PETITION
-		  </button>
-        </center>
-		</div>
-	  
-	  <div class="span4" id="petitions">
-		{% for petition in effectivePetitions %}
-		{% if loop.index is divisibleby 2 %}
-		  <div class="alert" data-id="{{ petition.id }}">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<h4>{{ petition.title }}</h4>
-			<h6>Vote #: {{ petition.votes}}</h6>
-			<p>{{ petition.note }}</p>
-			<p>{{petition.user}}</p>
-			<button type="button" id="vote-button" class="btn btn-mini">Vote</button>
-			<button type="button" id="unvote-button" class="btn btn-mini">Unvote</button>
-		  </div>
-		{% endif %}
-		{% endfor %}
-	  </div>
-	  
-	  <div class="span4" id="petitions">
-		{% for petition in effectivePetitions %}
-		  {% if not loop.index is divisibleby 2 %}
-		  <div class="alert" data-id="{{ petition.id }}">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<h4>{{ petition.title }}</h4>
-			<h6>Vote #: {{ petition.votes}}</h6>
-			<p>{{ petition.note }}</p>
-			<p>{{petition.user}}</p>
-			<button type="button" id="vote-button" class="btn btn-mini">Vote</button>
-			<button type="button" id="unvote-button" class="btn btn-mini">Unvote</button>
-		  </div>
-		  {% endif %}
-		{% endfor %}
-	  </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="newPetition" tabindex="-1" role="dialog" aria-labelledby="newLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="newLabel">NEW PETITION</h4>
-          </div>
-
-          <div class="modal-body" style="max-height: 800px">
-            <form class="form-horizontal well container-narrow"> 
-                <fieldset>
-                  <legend>Add Petition</legend>
-                    <label>Name</label>
-                    <input id="input-title" type="text" placeholder="eg. John Doe" class="span3">
-                    <label>Organization Name</label>
-                    <input id="org-name" type="text" placeholder="eg. Rice CS Club" class="span3">
-                    <label>Organization Email</label>
-                    <input id="org-email" type="text" placeholder="example@gmail.com" class="span3">
-                    <label>Description</label>
-                    <textarea id="input-text" class="span3 petition" rows="5" placeholder="This will display on our website!"></textarea><br><br>
-                  <button id="add-button" class="btn btn-primary" data-dismiss="modal">SUBMIT</button>
-                </fieldset>
-             
-            </form>
-          </div>
-
-        </div>
-      </div>
+    <div class="row">
+        <table id="petitions-table" class="table" data-toggle="table" data-pagination="true"
+               data-search="true" data-sort-name="organization" data-sort-order="asc">
+            <thead>
+            <tr>
+                <th data-field="organization" data-sortable="true">Organization</th>
+                <th data-field="election" data-sortable="true">Election</th>
+                <th data-field="position" data-sortable="true">Position</th>
+                <th data-field="name" data-sortable="true">Petition Creator</th>
+                <th data-field="message" data-sortable="false">Message</th>
+                <th data-field="signatures" data-sortable="true">Signatures Remaining</th>
+                <th data-field="sign" data-sortable="false">Signed</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for election in ongoing_elections %}
+            {% for position, position_petitions in petitions[election.title].items() %}
+            {% for petition in position_petitions %}
+            <tr data-id="{{petition.id}}">
+                <td>{{election.organization}}</td>
+                <td>{{election.title}}</td>
+                <td>{{position}}</td>
+                <td>{{petition.name}}</td>
+                <td>{{petition.message}}</td>
+                <td>
+                    {% if petition.signatures_left > 0 %}
+                    <span class="text-danger">{{petition.signatures_left}}</span>
+                    {% else %}
+                    <span class="text-success">{{petition.signatures_left}}</span>
+                    {% endif %}
+                </td>
+                {% if not petition.own and petition.signed %}
+                <td><button type="button" class="btn btn-success unsignpetition">Signed</button></td>
+                {% endif %}
+                {% if not petition.own and not petition.signed %}
+                <td><button type="button" class="btn btn-info signpetition">Not Signed</button></td>
+                {% endif %}
+                {% if petition.own %}
+                <td class="text-danger">Cannot sign your own petition</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-
-  </div>
-  <!-- modal toggle -->
-  <script type="text/javascript">
-  $('#newPetition').modal('show')
-  $('#newPetition').modal('hide')
-  </script>
-  <!-- rotate through some colors -->
-  <script type="text/javascript">
-    var colors = ['#F5A623', '#50E3C2', '#F8E71C', '#7ED321'];
-    var petitions = $('#petitions').children();
-    var color = 0;
-    for (i=0; i < petitions.length; i++) {
-        petitions[i].css('border-style', 'solid')
-        petitions[i].css('border-color', colors[color])
-
-        if (color == 3) {color = 0;}
-        else {color++;}
-    }
-  </script>
-
 </div> <!-- /container -->
+
 <script src="/static/js/petitions.js"></script>

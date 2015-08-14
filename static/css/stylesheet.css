@@ -1,79 +1,36 @@
-@font-face{
-    font-family: AktivGrotesk;
-    src: url('/static/fonts/AktivGrotesk200.ttf');
+.body {
+    vertical-align: middle;
 }
 
-@font-face{
-    font-family: AktivGrotesk;
-    src: url('../static/fonts/AktivGrotesk900.ttf');
-    font-weight: bold;
+#add-election-button {
+    height: 100%;
+    float: left;
+    margin-bottom: 10px;
 }
 
-a, p, span {
-    font-family: AktivGrotesk;
-}
-
-/* For the navigation sidebar in the petitions.html page */
-
-.header {
-    margin-bottom:1em;
-}
-
-#intro-box {
-    margin-top:2em;
-    border-color: grey;
-    border-style:dotted;
-    border-width:1px;
-    padding:2em;
-}
-
-/* For the main landing page */
-.container-narrow {
-    margin: 10px auto;
-    max-width: 275px;
-}
-
-.wow {
-    text-align: center;
-}
-
-.sticky {
-}
-
-#add-button {
-    margin-top: 10px;
-}
-
-
-/** Footer **/
-footer{
-    width: 100%;
+#errorimage {
     height: auto;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    width: auto;
+    max-width: 300px;
+    max-height: 300px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.modal{
+    display: block;
+}
+
+#ongoing-elections, #upcoming-elections, #ongoing-petitions, #expired-petitions, #admins, #expired-elections {
+    padding: 10px;
+    margin: 0 auto;
+}
+
+.jumbotron {
     text-align: center;
 }
-    footer > p{
-        width: 200px;
-        margin: 0 auto;
-        color: #797C7F;
-        font-size: 12px;
-        padding: 0px;
-    }
-    .footer-menu{
-        width: auto;
-        margin-bottom: 10px;
-    }
-    .footer-menu > a{
-        font-size: 11px;
-        -webkit-transition: all 0.3s ease-in-out;
-        transition: all 0.3s ease-in-out;
-    }
-        .footer-menu > a:hover{
-            color: #797C7F;
-        }
-    footer > span{
-        color: #BBBDC0;
-        font-size: 12px;
-    }
 
+.hiddenRow {
+    padding: 0 !important;
+}
